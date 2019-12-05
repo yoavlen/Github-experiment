@@ -1,0 +1,2312 @@
+\documentclass[11pt,reqno]{amsart}
+
+% --------------------------------------------------------------------
+% ----------------------------- Packages -----------------------------
+% --------------------------------------------------------------------
+\usepackage[colorlinks, linktocpage, citecolor = purple, linkcolor = blue]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2cm]{geometry}
+\usepackage{xparse}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{changepage} % for adjustwidth environment
+\usepackage[inline]{enumitem}
+\usepackage{verbatim}
+\setlist[enumerate,1]{label = (\alph*),
+                      ref = (\alph*)}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{braket}
+\usepackage{mathtools}
+\usepackage{MnSymbol}
+\usepackage{mathdots}
+\usepackage{mathrsfs}
+\usepackage[mathscr]{euscript}
+\let\euscr\mathscr
+\let\mathscr\relax % just so we can load this and rsfs
+\usepackage[scr]{rsfso}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows, cd, calc}
+\usepackage{pgfplots}
+\usepackage{ytableau}
+\usepackage{natbib}
+\usepackage{hyperref}
+%\usepackage{titling} % Removed this so that authors and abstract show up. 
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{varwidth}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{thmtools}
+\usepackage{thm-restate}
+\usepackage[capitalise]{cleveref}
+\usepackage{subcaption}
+
+\renewcommand{\rmdefault}{pplx} %Makes things look cool somehow. 
+\linespread{1.1}
+
+
+% --------------------------------------------------------------------
+% ----------------------------- Commands -----------------------------
+% --------------------------------------------------------------------
+
+\newcommand*{\N}{\mathbb{N}}
+\newcommand*{\Z}{\mathbb{Z}}
+\newcommand*{\Q}{\mathbb{Q}}
+\newcommand*{\R}{\mathbb{R}}
+\newcommand*{\C}{\mathbb{C}}
+\newcommand*{\cC}{\mathcal{C}}
+\newcommand*{\cZ}{\mathcal{Z}}
+\newcommand*{\cR}{\mathcal{R}}
+\newcommand*{\sP}{\mathscr{P}}
+
+\newcommand*{\abs}[1]{{\lvert #1 \rvert}}
+\newcommand*{\ang}[1]{{\langle #1 \rangle}}
+\newcommand*{\inv}[1]{#1^{-1}}
+\newcommand*{\iso}{\cong}
+\newcommand*{\comp}{\circ}
+\newcommand*{\given}{\mid}
+\newcommand*{\maps}{\nobreak\mskip2mu\mathpunct{}\nonscript
+  \mkern-\thinmuskip{:}\mskip6muplus1mu\relax}
+\newcommand*{\funct}[3]{#1 \maps #2 \to #3}
+
+\newcommand{\mat}[1]{\begin{pmatrix} #1 \end{pmatrix}}
+\newcommand*{\card}[1]{\abs{#1}}
+\newcommand*{\ti}[1]{\tilde{#1}}
+\newcommand*{\wti}[1]{\widetilde{#1}}
+\newcommand*{\restrict}[1]{{\mid}_{#1}}
+\newcommand*{\intr}[1]{#1^{\circ}}
+\newcommand*{\bdry}[1]{\partial #1}
+\makeatletter
+\let\@@pmod\pmod
+\DeclareRobustCommand{\pmod}{\@ifstar\@pmods\@@pmod}
+\def\@pmods#1{\mkern4mu({\operator@font mod}\mkern 6mu#1)}
+\makeatother
+\newcommand*{\disp}{\operatorname{disp}^{+}}
+%\newcommand*{\email}[1]{\href{mailto:#1}{\texttt{#1}}}
+
+\renewcommand{\Re}{\text{Re}}
+
+\newcommand{\todo}[1]{\textcolor{red}{#1}}
+\newcommand{\yoav}[1]{{\color{blue} \sf  Yo$\alpha$v: [#1]}}
+\newcommand{\yoavcolor}[1]{{\color{purple} #1}}
+\newcommand{\derek}[1]{{\color{Green} \sf D: [#1]}}
+\newcommand{\caelan}[1]{\textcolor{orange}{\sf C: [#1]}}
+\newcommand{\steven}[1]{\textcolor{pink}{\sf S: [#1]}}
+%\renewcommand{\qedsymbol}{\emph{Q.E.D.}}
+
+\DeclareMathOperator{\Frac}{Frac}
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Ext}{Ext}
+\DeclareMathOperator{\Cl}{Cl}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\cok}{cok}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Mor}{Mor}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\Nil}{Nil}
+\DeclareMathOperator{\Ann}{Ann}
+\DeclareMathOperator{\Forg}{Forget}
+\DeclareMathOperator{\Sym}{Sym}
+\DeclareMathOperator{\Lan}{Lan}
+\DeclareMathOperator{\Ran}{Ran}
+\DeclareMathOperator{\colim}{colim}
+\DeclareMathOperator{\Div}{Div}
+\renewcommand*{\div}{\operatorname{div}}
+\DeclareMathOperator{\Pic}{Pic}
+\DeclareMathOperator{\Jac}{Jac}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\trop}{Trop}
+\DeclareMathOperator{\Prym}{Prym}
+
+\newcommand{\DeclareAutoPairedDelimiter}[3]{%
+  \expandafter\DeclarePairedDelimiter\csname
+  Auto\string#1\endcsname{#2}{#3}%
+  \begingroup\edef\x{\endgroup
+    \noexpand\DeclareRobustCommand{\noexpand#1}{%
+      \expandafter\noexpand\csname Auto\string#1\endcsname*}}%
+  \x }
+\DeclareAutoPairedDelimiter{\p}{(}{)}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheoremstyle{problem}%
+{}{}%
+{}{}%
+{\bfseries}{.}%
+{ }%
+{\thmname{#1}\thmnumber{ #2}\thmnote{ #3}}
+\theoremstyle{problem}
+\newtheorem{example}[definition]{Example}
+\theoremstyle{plain}
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{conjecture}[definition]{Conjecture}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{corollary}[definition]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[definition]{Remark}
+
+\theoremstyle{theorem}
+\newtheorem{maintheorem}{Theorem}	
+\renewcommand{\themaintheorem}{\Alph{maintheorem}} % "letter-numbered" theorem
+\newtheorem{maincorollary}[maintheorem]{Corollary}			
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+%\numberwithin{table}{section}
+
+
+\definecolor{c1}{RGB}{180,180,255}
+\definecolor{c2}{RGB}{255,150,150}
+\definecolor{c3}{RGB}{220,150,255}
+%\thanksmarkseries{arabic}
+
+% --------------------------------------------------------------------
+% ------------------------------- Title ------------------------------
+% --------------------------------------------------------------------
+
+\title[Prym--Brill--Noether loci of special curves]{Prym--Brill--Noether loci of special curves%
+  \thanks{Research conducted at the Georgia Institute of Technology
+    with the support of RTG grant GR10004614 and REU grant
+      GR10004803 \caelan{check this}.}  }
+
+
+\author{Steven Creech}
+\address{School of Mathematics, Georgia Institue of Technology, Atlanta, GA 30332-0160, USA}
+\email{\href{mailto:screech6@gatech.edu}{screech6@gatech.edu}}
+
+\author{Yoav Len}
+\address{School of Mathematics, Georgia Institue of Technology, Atlanta, GA 30332-0160, USA}
+\email{\href{mailto:yoav.len@math.gatech.edu}{yoav.len@math.gatech.edu}}
+
+\author{Caelan Ritter}
+\address{Department of Mathematics, Brown University, Providence, RI 02912, USA}
+\email{\href{mailto:caelan\_ritter@gatech.edu}{caelan\_ritter@gatech.edu}}
+
+\author{Derek Wu}
+\address{School of Mathematics, Georgia Institue of Technology, Atlanta, GA 30332-0160, USA}
+\email{\href{mailto:dwu96@gatech.edu}{dwu96@gatech.edu}}
+
+
+
+%\title{ Prym--Brill--Noether loci of special curves%
+%  \thanks{Research conducted at the Georgia Institute of Techonology
+%    with the support of RTG grant GR10004614 and REU grant
+%      GR10004803 \caelan{check this}.}  }
+
+
+%
+%\author{
+%  Steven Creech
+%  \and
+%  Yoav Len\thanks{\email{yoav.len@math.gatech.edu}}
+%  \and
+%  Caelan Ritter
+%  \and
+%  Derek Wu
+%  }  
+%  \date{\today}
+  
+
+\begin{document}
+	
+	\begin{abstract}
+		We use Young tableaux to compute the
+		dimension of $V^r$, the Prym--Brill--Noether locus of a 
+		folded chain of loops of any gonality $k$. This tropical
+		result yields a new upper bound on the dimensions of algebraic
+		Prym--Brill--Noether loci.  Moreover, we prove that $V^r$ is
+		pure-dimensional and  connected in codimension $1$ when $\dim V^r \geq 1$. We then compute the genus of this locus for even gonality when the dimension is exactly $1$, and compute the cardinality when the locus is finite and the edge lengths are generic.
+	\end{abstract}
+	
+	\maketitle
+	
+	\setcounter{tocdepth}{1}
+	\tableofcontents
+
+% --------------------------------------------------------------------
+% ------------------------------- Body -------------------------------
+% --------------------------------------------------------------------
+
+\section{Introduction}
+Let $f\maps\wti{X}\to X$ be an unramified double cover of either 
+tropical or algebraic curves, and let $f_*$ be the induced map on
+divisor classes. The corresponding \emph{Prym--Brill--Noether locus}
+is
+% \begin{align*}
+%   V^r(X,f) = \{\, [D]\in\Jac(\wti{X}) \given \; &f_*(D) = K_X,\\
+%   &r(D)\geq r,\; r(D)\equiv r \pmod* 2 \,\},
+% \end{align*}
+\begin{equation*}
+  V^r(X,f) = \set{ [D]\in\Jac(\wti{X}) \given f_*(D) = K_X,\,
+    r(D)\geq r,\, r(D)\equiv r \pmod* 2},
+\end{equation*}
+where $K_X$ is the canonical divisor of $X$.  It is a variation of the
+classical Brill--Noether locus $W_r^d(\wti{X})$ that also takes
+symmetries of $\wti{X}$ into account. The Prym--Brill--Noether locus
+naturally lives inside the Prym variety $\Prym(X,f)$,  namely a connected
+component of the fiber of $K_X$ in the Jacobian of $\wti{X}$ (see
+Section \ref{sec:preliminaries} for more details).
+
+The dimension and topological properties of the usual Brill--Noether locus have been studied extensively  in classical algebraic geometry \cite{GH, Gieseker_Petri, Fulton_Lazarsfeld_degeneracy}	and in tropical geometry \cite{CDPR, JR, Len1}. More recently, dimensions of 
+non-maximal components of Brill--Noether loci were computed using both
+tropical and non-tropical techniques \cite{Cook_Jensen_BN_Components, Larson}.
+
+On the other hand, much less is known for Prym varieties. Bertram and Welters computed the dimension of the Prym--Brill--Noether locus for curves that are general in moduli  \cite{Bertram_Prym, Welters_Prym}, and Welters has also shown that the locus is generically smooth. 
+The tropical study of Prym varieties was initially introduced in  joint work of the second author with Jensen \cite{JL}, and further studied in joint work with Ulirsch \cite{len2019skeletons} (see \cite{LUZ_Abelian_covers} for higher degree covers).  As they show,  tropical Pryms are abelian of the expected dimension and behave well with respect to tropicalization, leading to a new bound on the dimension of  algebraic Prym--Brill--Noether loci of general even-gonal curves.
+
+Our first result is an extension of these techniques to curves of \emph{any} gonality. 
+\begin{restatable}{maintheorem}{tropicalPBN}
+	\label{thm:tropicalPBN}%
+	Let $\varphi\maps\wti\Gamma\to\Gamma$ be a  $k$-gonal uniform folded
+	chain of loops, and denote $l = \ceil{\frac{k}{2}}$.  Then
+	\begin{equation}\label{eq:4}
+	\codim V^r(\Gamma,\varphi) =
+	\begin{cases}
+	\binom{l+1}{2}+l(r-l) & \text{if $l \leq r-1$}\\
+	\binom{r+1}{2} & \text{if $l>r-1$}
+	\end{cases}.
+	\end{equation}
+\end{restatable}
+\noindent By \emph{uniform} we mean that each of its loops has the same torsion, see \cref{sec:preliminaries} for more details. 
+As it turns out, the odd gonality case is far  trickier than the even gonality one, which necessitates a variety of new combinatorial tools. 
+
+Denote the quantity expressed in \cref{eq:4}  by $n(r,k)$.  Note that we adopt the
+cons of $\cR_g$ such that for every unramified
+	double cover $f\maps\wti{C}\to C$ in this open subset we have
+	\begin{equation}\label{eq:1}
+	\dim V^r(C,f) \leq g-1-n(r,k).
+	\end{equation}
+\end{restatable}
+
+
+%We then
+%proceed to exhibit additional tropological properties (i.e.,
+%topological properties of tropical varieties) of the tropical
+%Brill--Noether loci, such as cardinality, connectivity, and pure
+%dimensionality.
+
+% In this paper, we study the dimensions of these loci for curves that boundary strata of the moduli space of curves. More precisely, we focus on curves of gonality $k$ for  positive integers $k$. In addition, we study more subtle invariants for curves that are general in moduli.
+
+%On the tropical side, we focus on the tropical curve known as the \emph{chain of loops}. 
+%Our main result is a determination of the dimension of its 
+%Prym--Brill--Noether locus  for \emph{every} gonality
+%$k$.
+
+
+
+
+We then turn our attention to more subtle \emph{tropological} (namely, topological properties of tropical varieties)
+properties of Prym--Brill--Noether loci of folded chains of loops. 
+\begin{maintheorem}\label{thm:pure-dim}
+	$V^r(\Gamma,\varphi)$ is pure-dimensional for any gonality $k$. If $\dim V^r(\Gamma,\varphi)\geq 1$ then it is also connected in codimension $1$.
+\end{maintheorem}
+Buy \emph{connected in codimension $1$} we mean that any two maximal components are connected by a sequence of components whose codimension is at most $1$.
+The different properties mentioned in the theorem are proven as part of  \cref{thm:path} and  \cref{thm:pure-dim}.
+%We first show  that the locus is always pure dimensional (\cref{thm:pure-dim}). 
+ The pure dimensionality of the locus is quite surprising since Brill--Noether loci of general $k$-gonal curves may very well  have maximal components of different dimension  (see, for instance \cite[Example 2.4]{Cook_Jensen_BN_Components}).  We don't know at this point whether this phenomena is special to tropical Prym curves, or carries on to algebraic ones as well. 
+
+
+
+When $r$ and $k$ are
+chosen so that $\dim V^r(\Gamma,\varphi)=0$, the Prym--Brill--Noether locus consists of a
+finite number of points.  If the gonality is also assumed to be
+even, we compute its cardinality by constructing a bijection between  its points and certain lattice paths(~\cref{prop:card}).  
+%  When its dimension is positive, we show in
+%Theorem \ref{thm:path} that the locus becomes path connected (in fact, connected in codimension $1$). 
+ If
+the dimension is $1$, the tropical Prym--Brill--Noether locus is a
+graph within the Prym variety, whose first homology we compute in the even-gonality case. 
+\begin{restatable}{maintheorem}{genericdim1}
+  \label{genericdim1}
+Let $\varphi\maps\wti\Gamma\to\Gamma$ be a generic chain of loops such that $\dim V^r(\Gamma,\varphi)=1$. Then the genus of 
+$V^r(\Gamma,\varphi)$ is
+  \begin{equation}
+    \frac{r \cdot f^{\lambda}\cdot (\binom{r+1}{2}+1)}{2} + 1,
+  \end{equation}
+  where $f^\lambda$ is the number of ways to fill a staircase tableau of length $r$ with distinct symbols. 
+\end{restatable}
+\noindent Moreover, we calculate the first homology in the cases where
+$k$ is 2 or 4 (Propositions \ref{prop:k2dim1} and \ref{prop:k4dim1}).  
+
+Most of the results in this paper rely on the correspondence between certain Young tableaux and divisors on tropical curves (cf. \cite{CDPR, pflueger2017special}). The key tool that we develop to enumerate such tableaux is the notion of a \emph{non-repeating strip}, a special subset that determines the rest of the tableau (see \cref{sec:an-interl} for more detail).
+We hope that this and  other techniques presented in this paper will lead to additional results concerning dimensions and Euler characteristics of tropical and algebraic Brill--Noether loci. 
+
+
+
+       \subsection*{Acknowledgements} 
+       We thank Dave Jensen for insightful remarks on a previous version of this manuscript. 
+    This   research was conducted at the Georgia Institute of Technology
+    with the support of RTG grant GR10004614 and REU grant
+    GR10004803. 
+    
+\section{Preliminaries}\label{sec:preliminaries}
+We assume throughout that the reader is familiar with the theory of
+divisors on tropical curves and with harmonic morphisms of graphs. A
+beautiful introduction to the topic may be found in the survey paper
+\cite{BJ}.  A morphism $\varphi\maps\wti\Gamma\to\Gamma$ of metric
+graphs is called a \emph{double cover} if it is harmonic of degree $2$
+in the sense of \cite{ABBR15}. The morphism is called
+\emph{unramified} if, in addition, it pulls back the canonical divisor
+of $\Gamma$ to the canonical divisor of $\widetilde\Gamma$.
+
+%Given a double cover as above and a divisor class $[D]\in \Jac(X)$,
+%every connected component of the fiber of $[D]$ inside $\Jac(\wti{X})$
+%is referred to as a \emph{Prym variety}. These varieties are important
+%invariants of curves, and form a bridge between their moduli and
+%Abelian varieties.  The Prym--Brill--Noether locus naturally lives
+%inside a Prym variety associated with the canonical divisor. The study
+%of tropical Prym varieties began in \cite{JL}, and was carried on in
+%\cite{len2019skeletons}.
+
+
+Fix a divisor class $[D]$ on $\Gamma$. The fiber
+$\varphi^{-1}_{*}([D])$ consists of either one or two connected
+components in the Picard group of $\widetilde\Gamma$ \cite[Proposition
+6.1]{JL}. Each of them is referred to as a \emph{Prym variety}, and
+their elementte[Theorem 5.3.8]{len2019skeletons}.
+
+We will mostly be interested in a particular double cover known as the
+\emph{folded chain of loops}. In this case, the target of the map is
+the \emph{chain of loops} that recently appeared in various celebrated
+papers (e.g. \cite{MRC, Pflueger, JR}). It consists of $g$ loops,
+denoted  $\gamma_1,\ldots,\gamma_g$ and connected by bridges. The
+source graph is a chain of $2g-1$ loops, as exemplified in Figure
+\ref{fig:2}.  Each pair of loops $\ti\gamma_a$ and $\ti\gamma_{2g-a}$
+(for $a<g$) maps down to $\gamma_a$, while each edge of $\ti\gamma_g$
+maps isometrically onto the loop $\gamma_g$.  See \cite[Section
+5.2]{len2019skeletons} for a detailed explanation.
+
+\begin{figure}[H]
+  \centering
+  \input{figures/ex-prym-divisor.tex}
+  \caption{A Prym divisor on the 4-gonal folded chain of 7 loops and
+    its image under $\varphi_{*}$ in the 4-gonal chain of 7 loops.}
+  \label{fig:2}
+\end{figure}
+
+The \textit{torsion} of a loop $\gamma_a$ is the least positive
+integer $k$ such that $\ell_a+m_a$ divides $k\cdot m_a$, where $m_a$
+and $\ell_a$ are the lengths of the lower and upper arcs of $\gamma_a$
+respectively.  The chain of loops is \emph{uniform $k$-gonal} if each
+loop has torsion $k$. Note that a uniform $k$-gonal chain of loops is
+indeed a $k$-gonal metric graph in the sense of \cite[Section
+1.3.2]{ABBR152}.  A double cover as above is said to be uniform
+$k$-gonal if $\Gamma$ is.  Note that $\wti\Gamma$ is not in itself
+uniform $k$-gonal, since the loop $\ti\gamma_g$ has torsion $2$.
+
+\subsection{Prym tableaux}
+We study divisors only indirectly, making use of a correspondence
+between sets of divisors on chains of loops and Young tableaux as
+introduced in \cite{Pflueger, len2019skeletons}; here we shall recall
+only the essential definitions and introduce some helpful notation.
+
+For our purposes, a tableau on a subset $\lambda \subset \N^2$ is a map
+$t \maps \lambda \to [n] = \set{1,2,\ldots n}$ satisfying the
+\textit{tableau condition}: $t(x,y) < t(x+1,y)$ and
+$t(x,y) < t(x,y+1)$ whenever these values are defined. We call an element $(x,y) \in \lambda$ a \emph{box} of $t$, and its image $t(x,y) \in \N$ the \emph{symbol} contained in the box $(x,y)$. We say
+that a box $(x,y)$ is \textit{below} $(x',y')$ if $x \leq x'$,
+$y \leq y'$, and $(x,y) \neq (x',y')$.   The tableau condition implies that $t(x,y)<t(x',y')$ whenever $(x,y)$ is below $(x',y')$.  When $\lambda$ is a partition of $n$ and $t$ is injective, then $t$ is a standard Young tableau.
+
+
+The tableau $t$ is called a \textit{$k$-uniform displacement tableau} if
+\[
+   t(x,y) = t(x',y') \text{ only if } x-y\equiv x'-y'\pmod* k.
+\]
+We refer to $0$-uniform displacement tableau as \emph{generic} (for reasons that will become clear later). Note that such tableau are exactly the standard Young tableau. 
+Notice that this \textit{displacement condition} partitions $\lambda$
+into $k$ regions, which we shall call \emph{diagonals modulo $k$}.  To
+be precise, we define the $i$-th diagonal modulo $k$ to be
+\begin{equation*}
+\label{eq:2}
+  D_i = \set{(x,y)\in\lambda \given x - y \equiv i \pmod* k};
+\end{equation*}
+then $\lambda$ is the disjoint union of $D_i$ for
+$i \in \set{0,1,\ldots,k-1}$, and the fiber of each element in the
+codomain of $t$ is contained within some $D_i$.
+
+The $n$-th \textit{anti-diagonal} $A_n$ is the set of all boxes
+$(x,y)$ such that $x + y = n + 1$.  Define the \textit{lower triangle
+  of size $n$} to be $T_n = \bigcup_{i=1}^{n} A_i$; we shall
+refer to $A_n$ as the \textit{main anti-diagonal} in this context. For
+example, Figure \ref{fig:example-tableau} shows a lower-triangular
+tableau of size 6.
+%,i.e., a tableau on the partition $(6,5,4,3,2,1)$
+% \yoav{(on Wikipedia the values of the partition decrease from left to
+%   right. Check the notation that was used in Pflueger,
+%   Jensen--Ranganathan, and my paper. Also, do the values of the
+%   % partition represent width of rows or height of columns?)}
+$D_1$ is colored blue, $A_6$ is red, and their intersection is purple.
+In the French notation, the bottom-left box is $(1,1)$, with the first
+coordinate increasing to the right and the second coordinate
+increasing upwards.  Every box here not colored red or purple is below
+$A_6$.
+
+\begin{figure}[H]y be interested in a particular double cover known as the
+	\emph{folded chain of loops}. In this case, the target of the map is
+	the \emph{chain of loops} that recently appeared in various celebrated
+	papers (e.g. \cite{MRC, Pflueger, JR}). It consists of $g$ loops,
+	denoted  $\gamma_1,\ldots,\gamma_g$ and connected by bridges. The
+	source graph is a chain of $2g-1$ loops, as exemplified in Figure
+	\ref{fig:2}.  Each pair of loops $\ti\gamma_a$ and $\ti\gamma_{2g-a}$
+	(for $a<g$) maps y be interested in a particular double cover known as the
+	\emph{folded chain of loops}. In this case, the target of the map is
+	the \emph{chain of loops} that recently appeared in various celebrated
+	papers (e.g. \cite{MRC, Pflueger, JR}). It consists of $g$ loops,
+	denoted  $\gamma_1,\ldots,\gamma_g$ and connected by bridges. The
+	source graph is a chain of $2g-1$ loops, as exemplified in Figure
+	\ref{fig:2}.  Each pair of loops $\ti\gamma_a$ and $\ti\gamma_{2g-a}$
+	(for $a<g$) maps 
+  \centering
+  \ytableausetup{centertableaux}
+  \begin{ytableau}
+    *(c3)11\\
+    9&*(c2)10\\
+    7&*(c1)8&*(c2)9\\
+    *(c1)5&6&7&*(c3)8\\
+    3&4&*(c1)5&6&*(c2)7\\
+    1&*(c1)2&3&4&*(c1y be interested in a particular double cover known as the
+    \emph{folded chain of loops}. In this case, the target of the map is
+    the \emph{chain of loops} that recently appeared in various celebrated
+    papers (e.g. \cite{MRC, Pflueger, JR}). It consists of $g$ loops,
+    denoted  $\gamma_1,\ldots,\gamma_g$ and connected by bridges. The
+    source graph is a chain of $2g-1$ loops, as exemplified in Figure
+    \ref{fig:2}.  Each pair of loops $\ti\gamma_a$ and $\ti\gamma_{2g-a}$
+    (for $a<g$) maps )5&*(c2)6
+  \end{ytableau}
+  \caption{A typical example of a lower-triangular tableau of size 6
+    with torsion 3.}
+  \label{fig:example-tableau}
+\end{figure}
+
+As explained in \cite{Pflueger}, $k$-uniform displacement tableaux on
+the rectangle $[g-d+r]\times[r+1]$ with image contained in $[g]$ give
+rise to divisors of rank at least $r$ on the uniform $k$-gonal chain
+of $g$ loops. These definitions extend naturally to the folded chain,
+as it is itself a chain of loops; the only difference is that while
+the fiber of a symbol $a \neq g$ is contained within a single diagonal
+modulo $k$, the fiber of $g$ must occur within one of the two
+diagonals modulo 2.  (Equivalently, each box containing $g$ must be even
+cab distance from each other such box.)  By abuse of terminology, we
+shall refer to such tableau as $k$-uniform.
+
+We note that for a $k$-gonal chain of $g$ loops $\Gamma$, the genus of
+the folded chain $\wti \Gamma$ is $2g-1$.  Moreover, Prym divisors map
+down to $K_\Gamma$ and must therefore have degree $2g-2$. We call a
+$[r+1]\times [r+1]$ square tableau $t$ on $[2g-1]$ symbols \emph{Prym
+  of type $(g,r,k)$} if $t$ is $k$-uniform and satisfies the following
+\textit{Prym condition}: $t(x,y)=2g - t(x',y')$ only if $(x,y)$ and
+$(x',y')$ both lie in the same diagonal modulo $k$.
+
+Such tableaux give rise to a set $P(t)$ 
+of Prym divisors of rank at least $r$ on
+the $k$-uniform folded chain of $2g-1$ loops. In fact, every
+Prym divisor of rank at least $r$ is obtained this way \cite[Corollary
+5.3.10]{len2019skeletons}. 
+
+
+
+%$P(t)$ is a linear subspace within the Prym variety whose co-dimension equals the number of pairs $\set{a,2g-a}$ for $a \neq g$ such that either $a$ or its dual appears in $t$. The \emph{co-dimension} of a tableau is defined to be the co-dimension of the corresponding set of divisors. 
+
+
+%A tableau $t$
+%on the folded chain determines a subset $P(t)$ of $V^r$ just if it is
+%square of size $r+1$ and it obeys the following \textit{Prym
+% condition}: $t(x,y)=2g - t(x',y')$ only if $(x,y)$ and $(x',y')$
+%both lie in the same diagonal mod $k$.  We say that such a tableau is
+%\textit{Prym of type $(g,r,k)$} (or just \textit{Prym}, when the
+%parameters are understood from context).  Given a symbol $a$, call the
+%symbol $2g-a$ its \textit{dual}.  The \textit{codimension} of $t$,
+%denoted $\codim(t)$, is the number of pairs $\set{a,2g-a}$ for
+%$a \neq g$ such that either $a$ or its dual appears in $t$.
+
+% we get a set $T(t)$ containing divisor classes of rank at least $r$
+% on the chain of $g$ loops by defining $\ang{\xi}_a \doteq x - y$,
+% where $t(x,y) = a$; if $t$ does not contain the symbol $a$, then
+% $\ang{\xi}_a$ is free to vary.  If we allow repeats in $t$, they
+% must be compatible with this definition.  In particular, if the
+% torsion of $\gamma_a$ is $k$, then it can only be the case that
+% $t(x,y)=t(x',y')=a$ if $x-y \equiv x'-y' \pmod k$.  (Provided that
+% the tableau condition holds, this is equivalent to requiring that
+% the cab distance $\abs{x-x'}+\abs{y-y'}$ be a multiple of $k$.)
+% Call this the \textit{displacement condition}. The fibers of the
+% mapping $\lambda\to\Z/k\Z$ defined by $(x,y) \mapsto x - y$
+% partition $\lambda$ into $k$ subsets.  Therefore, as a shorthand,
+% let the $i$-th \textit{diagonal mod} $k$, $D_i$, denote the preimage
+% of $i$ under this mapping; then, provided that the torsion of
+% $\gamma_a$ is $k$,y be interested in a particular double cover known as the
+\emph{folded chain of loops}. In this case, the target of the map is
+the \emph{chain of loops} that recently appeared in various celebrated
+papers (e.g. \cite{MRC, Pflueger, JR}). It consists of $g$ loops,
+denoted  $\gamma_1,\ldots,\gamma_g$ and connected by bridges. The
+source graph is a chain of $2g-1$ loops, as exemplified in Figure
+\ref{fig:2}.  Each pair of loops $\ti\gamma_a$ and $\ti\gamma_{2g-a}$
+(for $a<g$) maps  if the symbol $a$ in $D_i$ repeats, it may do so
+% only elsewhere in $D_i$.
+
+%\begin{figure}
+%    \centering
+%    \input{figures/folded-chain-coords.tex}
+%    \caption{Where to place chips from double cover}
+%    \label{fig:2.4}
+%\end{figure}
+
+%\begin{remark}\label{rem:8}
+%  Observe that $P(t)$ is a torus of dimension $g - 1 - \codim(t)$.
+%  With this in mind, we say that $t$ is \textit{maximal} if it has
+%  minimal codimension among all Prym tableaux of type $(g,r,k)$.  If
+%  $t$ is maximal, then $\dim(V^r) = g - 1 - \codim(t)$ \todo{CITE or
+%    explain}.
+%\end{remark}
+
+% We note that the Prym condition relates the placement of symbol $a$
+% and its dual symbol $2g-a$; thus, for symbol $a$, we call the symbol
+% $2g-a$ its \textit{dual} symbol. We note, the Prym condition can be
+% restated as each symbol and its dual lie on the same diagonal modulo
+% $k$.
+
+\section{Dimensions of Prym--Brill--Noether loci}
+
+Our primary focus in this section is  to prove \cref{thm:tropicalPBN}, by constructing Prym tableaux  that minimize the number of symbols used.
+Under the correspondence between tableaux and divisors, each symbol in the tableau determines the position of a chip on the corresponding loop. In the case of Prym divisors, the position of a chip on the $a$-th loop determines the position on the $2g-a$-th loop and vice versa. 
+In particular, if a
+symbol $a$ appears in $t$, then the placement of chips on the loops
+$a$ and $2g-a$ are determined in $P(t)$; the symbol $2g-a$ may then
+appear in the tableau ``for free'', in the sense that it does not affect the codimension of the set of divisors (provided that the Prym condition
+is satisfied). Similarly, the Prym
+condition stipulates that the chip on the $g$-th loop is at one of two
+coordinates, so an appearance of the symbol $g$ in the tableau does
+not increase the codimension. 
+
+It is  therefore reasonable to expect that the codimension is minimized precisely for those Prym tableaux in which symbols $a$ and $2g-a$ appear in pairs. This motivates the notion of \emph{reflective} Prym tableau. 
+
+
+
+%The motivation is as follows.  Observe that a $k$-uniform displacement
+%tableau $t$ on $[g-d+r] \times [r+1]$ determines a cell of
+%$\Pic(\wti \Gamma)$ \caelan{this isn't right, or at least not phrased
+%  well} whose codimension equals the number of distinct symbols
+%appearing in $t$.  Unfortunately, the situation is not so
+%straightforward when it comes to Prym tableaux: in particular, if a
+%symbol $a$ appears in $t$, then the placement of chips on the loops
+%$a$ and $2g-a$ are determined in $P(t)$; the symbol $2g-a$ may then
+%appear in the tableau ``for free'' (provided that the Prym condition
+%is satisfied), in the sense that it does not increase the codimension
+%of $P(t)$ relative to $\Prym(\Gamma,\varphi)$.  Similarly, the Prym
+%condition stipulates that the chip on the $g$-th is at one of two
+%coordinates, so an appearance of the symbol $g$ in the tableau does
+%not increase the codimension.  If our goal is to minimize codimension
+%\'a la Theorem \ref{thm:tropicalPBN}, then we would do well in taking
+%advantage of these facts as much as possible---the notion of
+%reflectivity is constructed in such a way as to do this.
+%\caelan{Maybe this motivating paragraph belongs back at the beginning
+%  of the ``Reflective tableaux'' section; I can't decide.}
+
+%In \cref{sec:reflective}, we define reflective tableaux and prove the
+%their essential properties.  This allows us to prove
+%\cref{thm:tropicalPBN} in \cref{sec:tropical-dim-proof}.  Finally, we
+%leverage this result in \cref{sec:algebraic-dim-proof} to prove its
+%algebraic analogue, \cref{cor:algebraicPBN}.
+
+
+\subsection{Reflective tableaux}\label{sec:reflective}
+
+Given a Prym tableau $t$ with domain
+$\lambda = [r+1]\times[r+1]$, consider the map
+$\rho\maps\lambda\to\lambda$ defined by $\rho(x,y)=(r+2-y, r+2-x)$; in
+other words, $\rho$ picks out the box which is the reflection of
+$(x,y)$ across the main anti-diagonal.  We say that a box $(x,y)$ is
+\textit{reflective} if $t(x,y) = 2g - t(\rho(x,y))$ (i.e., if the
+symbol in the box is the dual of the symbol in its reflection).
+
+\begin{definition}
+  A tableaux $t$ is said to be \textit{reflective} if 
+  every box of $t$
+  is reflective.
+%and likewise for any restriction of $t$.  
+\end{definition}
+\noindent Note that a displacement tableau is reflective only if it is Prym.
+
+Given two Prym tableaux $t$ and $s$ of type $(g,r,k)$, we shall say
+that $s$ \textit{dominates} $t$ if $P(s) \supseteq P(t)$.  If $s$ and
+$t$ each dominate the other, we shall call them \textit{equivalent}.
+By a slight abuse of notation, we define $\codim(t)$ to be the
+codimension of the corresponding set of Prym divisors $P(t)$ regarded
+as a subset of the $\Prym(\Gamma,\varphi)$.  By our earlier remarks,
+$\codim(t)$ counts the pairs of symbols $\set{a,2g-a}$ for which
+$a\neq g$ and either $a$ or $2g-a$ appears in $t$.
+
+\begin{remark}\label{rem:4}
+  A tableau $s$ dominates $t$ precisely when for each
+  $(x,y) \in \lambda$, there exists $(x',y') \in \lambda$ in the
+  same diagonal modulo $k$ such that either $s(x,y) = t(x',y')$ or
+  $s(x,y) = 2g - t(x',y')$.
+\end{remark}
+
+If $s$ dominates $t$, then  $\codim(s) \leq \codim(t)$. Therefore, for the purpose of computing the dimension of $V^r(\Gamma,\varphi)$, we may restrict our attention to the tableaux that are maximal with respect to the partial order given by dominance. 
+The main result of this section is the following.
+
+\begin{proposition}\label{prop:reflective}
+  Let $t$ be a Prym tableau.  Then there exists a reflective tableau
+  $s$ that dominates $t$.
+\end{proposition}
+
+The following definition from
+\cite{pflueger2017special} will be used repeatedly during the proof. Given a partition $\lambda$ and subset
+$S \subset \Z/k\Z$, the \textit{upward displacement of $\lambda$ by
+  $S$}, denoted $\disp(\lambda, S)$, is equal to
+$\lambda \cup L$, where $L$ consists precisesly of those
+boxes $(x,y) \nin \lambda$ such that:
+\begin{itemize}
+\item $(x-1,y) \in \lambda$ or $x=1$,
+\item $(x,y-1) \in \lambda$ or $y=1$, and
+\item $x - y \equiv i \pmod k$ for some $i \in S$.
+\end{itemize}
+The boxes in $L$ are known as the \textit{loose boxes of $\lambda$
+  with respect to $S$}.  When $S = \Z/k\Z$, we use the shorthand
+$\disp(\lambda)$ and note the following: if $\lambda$ is a partition,
+then so is $\disp(\lambda)$; $L$ is nonempty; every box in $\lambda$
+is below some box in $L$; and every box in
+$\N^2 \setminus \disp(\lambda)$ is above some box in $L$.  The
+usefulness of this operation on partitions is made evident in the
+following example, which outlines the subsequent proof of Proposition
+\ref{prop:reflective}.
+
+\begin{example}\label{ex:1}
+  Consider the initial Prym tableau of type $(g,r,k)=(11,4,3)$ in the sequence
+  illustrated in Fig.~\ref{fig:reflective}.  This tableau is far from
+  being reflective, but at each step we make small changes so that the
+  resulting tableau is closer to being reflective and dominates the
+  preceding one.  
+  
+ 
+  At each step, the boxes previously dealt with are depicted in blue;
+  we look at the symbols in the loose boxes with respect to the
+  lower-left blue partition and choose the minimum $a$; we look at the
+  symbols contained in the reflection of the loose boxes and choose
+  the maximum $b$; finally, denote $c$ the minimum of $a$ and $2g-b$.
+  If $c$ was obtained at the box $(x,y)$, replace the value at each
+  loose box in the same diagonal modulo $k$ (depicted in red) with $c$,
+  and the value at their reflection (depicted in red as well) with
+  $2g-c$. The final tableau is reflective and dominates the initial
+  tableau.
+
+  \begin{figure}[H]
+    \input{figures/ex-reflective-proof.tex}
+    \caption{Replacing a non-reflective tableau with a dominant
+      reflective one.}
+    \label{fig:reflective}
+  \end{figure}
+\end{example}
+
+The basic operation of the algorithm is to repeatedly \textit{reflect}
+symbols, i.e., given a box $\omega$, to insert the dual symbol,
+$2g - t(\omega)$, into the reflection, $\rho(\omega)$.  The following
+lemma ensures that the result is still a Prym tableau, granted that
+the tableau condition holds; then the proof of Proposition
+\ref{prop:reflective} will make the rest of the algorithm precise.
+
+\begin{lemma}\label{lem:5}
+  Given a Prym tableau $t$ such that the box $(x,y)$ is not
+  reflective, the tableau $s$ obtained by defining  
+  \begin{equation}\label{eq:18}
+    s(\omega) =    
+    \begin{cases}
+      2g - t(x,y) &\text{for } \omega = \rho(x,y) \\
+      t(\omega) &\text{otherwise}
+    \end{cases}
+  \end{equation}
+  satisfies the Prym and displacement conditions.
+\end{lemma}
+
+\begin{proof}
+  The only box at which either of the conditions might fail is at
+  $\rho(x,y)$.  However, taking the difference of the coordinates of
+  $\rho(x,y) = (r+2-y,r+2-x)$, we find that $\rho(x,y) \in D_{x-y}$.
+  The Prym condition is immediately satisfied, and it is not hard to
+  see that, since any other box containing the symbol $2g - t(x,y)$
+  would need to be in $D_{x-y}$, the displacement condition is also
+  satisfied.
+\end{proof}
+
+\begin{proof}[Proof of Proposition \ref{prop:reflective}]
+  Denote $s_0=t$. We describe an algorithm which at each step, given a Prym tableau $s_i$, will produce a
+  Prym tableau $s_{i+1}$ that dominates $s_i$. After a finite number of steps, 
+  the algorithm will produce Prym
+  tableau $s_f$ which is reflective away from the main anti-diagonal
+  and which dominates $t$ by transitivity.  In the final step,   the symbols along the main anti-diagonal of $s_f$ are replaced with
+  $g$ to obtain $s$.
+
+  Suppose that after the $i$-th step we have a Prym tableau $s_i$ that
+  dominates $s_{i-1}$.  Define $\kappa_i$ to be the subpartition of
+  boxes below the main anti-diagonal whose symbols in $s_i$ are at most
+  $n_i$.  (Note that the blue-colored boxes in Example \ref{ex:1} are
+  precisely $\kappa_i \cup \rho(\kappa_i)$.)  Suppose that $\kappa_i$
+  is reflective and that $s_i(\omega) = t(\omega)$ for each box
+  $\omega$ not in $\kappa_i \cup \rho(\kappa_i)$.  If
+  $\kappa_i = T_r$, we are ready to perform the final step.
+  Otherwise, let $L_i$ be the set of loose boxes of $\kappa_i$ that
+  lie below the main anti-diagonal, and note that $L_i$ is nonempty.
+
+  Consider the minimal positive integer $n_{i+1}$ among the set of
+  symbols $s_i(L_i) \cup (2g - s_i(\rho(L_i)))$.  We claim that
+  $n_{i+1}$ exists and is at most $g-1$.  Indeed, given any
+  $\omega \in L_i$, if $s_i(\omega) \leq g-1$, the claim is true.
+  Otherwise, $s_i(\omega) \geq g$; since $\omega$ lies below its
+  reflection $\rho(\omega)$, it follows that $s_i(\rho(\omega)) \geq g+1$; moreover, it must be
+  the case that $s_i(\rho(\omega)) \leq 2g-1$; from both of these
+  inequalities we find that $1 \leq 2g-s_i(\rho(\omega)) \leq g-1$, as
+  desired.
+
+  Note also that $n_{i+1} \geq n_i+1$; otherwise, any boxes containing
+  $n_{i+1}$ would be in $\kappa_i$ and any boxes containing its dual
+  would be in $\rho(\kappa_i)$ (and so they would not appear in either
+  $L_i$ or $\rho(L_i)$, respectively).  Then every box in
+  $T_r \setminus \disp(\kappa_i)$ must be above some box of $L_i$, so
+  the fact that $n_{i+1}$ is (in particular) minimal among the symbols
+  in $L_i$ implies that $n_{i+1}$ cannot appear in any box of
+  $T_r \setminus \disp(\kappa_i)$; such a case would violate the
+  tableau condition.  Analogously, $2g-n_{i+1}$ is at least $g+1$ and
+  at most $2g-(n_i+1)$ and does not appear in the reflected set
+  $\rho(T_r \setminus \disp(\kappa_i))$.
+
+  From these considerations, we find that the next tableau, $s_{i+1}$,
+  constructed by defining
+  \begin{equation}
+    \label{eq:10}
+    s_{i+1}(\omega) = 
+    \begin{cases}
+      2g - n_{i+1} &
+      \text{for } \omega \in \rho(\inv s_i(n_{i+1}) \cap T_r) \\
+      n_{i+1} &
+      \text{for } \omega \in \inv s_i(2g-n_{i+1}) \cap \rho(T_r) \\
+      s_i(\omega) & \text{otherwise }
+    \end{cases},
+  \end{equation}
+  satisfies the tableau condition.  In terms of Example \ref{ex:1}, this
+  construction amounts to the following: color every box below
+  $A_{r+1}$ which contains $n_{i+1}$ and every box above $A_{r+1}$
+  which contains $2g - n_{i+1}$ red; then color each box which is the
+  reflection of a red box red; now replace the symbols in each of
+  these latter boxes with either $2g-n_{i+1}$ or $n_{i+1}$ as
+  appropriate.  Then it becomes clear that the result still satisfies
+  the tableau condition, since $n_{i+1}$ is larger than every lower-left
+  blue box and smaller than every uncolored box and $2g-n_{i+1}$ is
+  larger than any uncolored box and smaller than any upper-right blue
+  box.
+
+  It follows from repeated application of Lemma \ref{lem:5} that the
+  displacment and Prym conditions are preserved in $s_{i+1}$.  Given
+  this, it is straightforward to see that $s_{i+1}$ dominates $s_i$
+  and---by transitivity---$t$.  Note also that adding a selection of
+  loose boxes to a partition forms another partition, so in
+  particular, the next set $\kappa_{i+1}$ will be a partition.  It
+  will also be equal to the set $\inv s_{i+1} ([n_{i+1}]) \cap T_r$.
+  Therefore, all the inductive hypotheses are satisfied.
+
+  Since $\kappa_{i+1}$ strictly contains $\kappa_{i}$, it follows that
+  in a finite number of steps, $T_r$ will be reflective.  After the
+  final step, we replace all boxes on the main anti-diagonal $A_{r+1}$
+  with symbol $g$, and the resulting tableau is reflective.
+\end{proof}
+
+A reflective tableau is determined by its restriction to
+$T_r$, so we may as well only consider this subset. 
+
+\begin{definition}
+A \textit{staircase Prym tableau of type $(g,r,k)$} is
+ a lower-triangular $k$-uniform displacement tableau of length $r$ with image
+in $[g-1]$.  
+\end{definition}
+We extend all definitions regarding Prym tableaux to
+staircase Prym tableaux in the natural way; for instance, if $s$ is a reflective square tableau which extends a
+staircase Prym tableau $t$, then $P(t)$ equals, by definition, $P(s)$.
+
+\subsection{Proof of
+  \cref{thm:tropicalPBN}}\label{sec:tropical-dim-proof}
+
+Throughout this section, $\varphi\maps\wti\Gamma\to\Gamma$ will
+represent a folded chain of loops of genus $g$, where the edge lengths
+of $\Gamma$ are either generic or the torsion of each loop is $k$. For
+the sake of brevity, we will refer to the folded chain of loops and
+its corresponding Prym tableaux in the former case as \emph{generic}
+and in the latter as \textit{$k$-gonal}.
+
+The dimension of $V^r(\Gamma,\varphi)$ is known in the generic case
+and when $k$ is even; see \cite[Theorem~6.1.4, Corollary~6.2.2]{len2019skeletons}.  When
+$k$ is odd, \cite[Remark~6.2.3]{len2019skeletons} provides an upper
+and a lower bound for the dimension. In this section we show that the
+dimension of $V^r(\Gamma, \varphi)$ in fact coincides with the lower
+bound. As a consequence, we obtain an upper bound on the dimension of
+$V^r$ for generic $k$-gonal algebraic curves.  We restate the precise
+result here.
+
+\tropicalPBN*
+
+We have phrased this in terms of codimension rather than dimension
+because of the close relationship between codimension of $P(t)$ and
+the number of pairs of symbols in $t$.  In fact, because we are
+concerned with computing the minimal codimension of $P(t)$ over all
+Prym tableaux $t$ of type $(g,r,k)$, \cref{prop:reflective} implies
+that it suffices to consider staircase Prym tableaux: given any Prym
+tableau, we apply the reflection algorithm to obtain a dominating Prym
+tableau, which, per the remarks at the end of \cref{sec:reflective},
+may be regarded as the staircase Prym tableaux which constitutes its
+restriction to the lower triangle.  Then, for $t$ a staircase Prym
+tableaux, we have the convenient formula $\codim(t) = \card{\im t}$.
+
+The second case in \cref{eq:4} corresponds to generic edge lengths.
+Note that $\binom{r+1}{2}$ counts the number of boxes in $T_r$.  The
+cab distance between any two boxes is at most $2r-2 \leq 2l - 2 < k$,
+so each must contain a unique symbol; it follows that the number of
+symbols in any such tableau is precisely $\binom{r+1}{2}$.
+
+The same reasoning explains the presence of the $\binom{l+1}{2}$ term
+in the first case: it counts the number of symbols in $T_l$, which are
+all necessarily unique.  Any repeats occur above $T_l$.  In fact, we
+claim that a tableau of minimal codimension contains precisely $l$ new
+symbols on each subsequent anti-diagonal, of which there are $r-l$;
+this accounts for the $l(r-l)$ term.  Precisely, we say that a set of
+symbols $S \subset t(A_n)$ is \textit{new} if $S \cap t(T_{n-1})$ is
+empty.
+% Similarly, we say that a set of boxes $B \subset A_n$ is
+% \textit{new} if $t(B)$ is new and $t\restrict{B}$ is injective.
+
+\begin{proposition}
+  \label{prop:1}
+  Given a staircase Prym tableau $t$ of type $(g,r,k)$, there exist at
+  least $l$ new symbols in $A_n$ for each $n \geq l + 1$.
+\end{proposition}
+
+\noindent The following lemma establishes a restriction on symbols
+which will go most of the way toward proving \cref{prop:1}.
+
+\begin{lemma}
+  \label{lem:2}
+  Let $t$ be a staircase Prym tableau of type $(g,r,k)$, and fix
+  $n\leq r$.  For any boxes $(x,y) \in D_i$ and $(x',y') \in D_{i+1}$
+  that lie below $A_n$, there exists a box
+  $\omega = (\omega_1,\omega_2) \in A_n\cap(D_i\cup D_{i+1})$ such
+  that $t(\omega)$ is greater than both $t(x,y)$ and $t(x',y')$.
+\end{lemma}
+
+\begin{proof}
+  Denote $a= t(x,y)$ and $b= t(x',y')$.  Since $a$ and $b$
+  lie in different diagonals modulo $k$, we know that $a \neq b$.  We
+  will assume that $a<b$; the proof will follow the same way when the
+  converse inequality holds.  We want to show that there is a box
+  $\omega$ in $A_n\cap(D_i\cup D_{i+1})$ which lies above $(x',y')$,
+  since this would force $t(\omega) > b$
+
+  Indeed, define $\delta = n+1-x'-y'$.  We know that $x'+y' \leq n$
+  because $(x',y')$ sits below $A_n$, so $\delta \geq 1$.  If $\delta$
+  is even, then we define
+  \begin{equation}
+    \label{eq:6}
+    \omega \coloneq
+    \left(x'+\frac{\delta}{2},y'+\frac{\delta}{2}\right).
+  \end{equation}
+  Note that $\omega_1$ and $\omega_2$ are both positive integers,
+  $\omega_1+\omega_2=n+1$, and
+  $\omega_1-\omega_2 = x'-y' \equiv i+1 \pmod k$; moreover,
+  $\omega$ sits above $(x',y')$, as desired.
+
+  Suppose instead that $\delta$ is odd, and   define
+  \begin{equation}
+    \label{eq:7}
+    \omega \coloneq
+    \left( x'+\frac{\delta-1}{2} ,
+           y'+\frac{\delta+1}{2} \right).
+  \end{equation}
+  Then the desired properties once again hold (although in this case,
+  $\omega \in D_i$).
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:1}]
+  Given $n$ such that $l+1 \leq n \leq r$, we note first that
+  $T_{n-1} \cap D_i$ is nonempty.  Indeed, we may write
+  $i \in \set{-l+1,\ldots,l-1}$.  If $i \geq 0$, we have that
+  $(1+i,1) \in T_{n-1} \cap D_i$; if $i < 0$, then
+  $(1,1-i) \in T_{n-1} \cap D_i$.
+
+  For each $i$, choose $\omega_i \in T_{n-1} \cap D_i$ such that
+  $t(\omega_i)$ is maximal among $t(T_{n-1} \cap D_i)$.  Then apply
+  \cref{lem:2} to each pair $\omega_i$, $\omega_{i+1}$ to obtain a box
+  $\eta_i \in A_n \cap (D_i \cup D_{i+1})$ such that
+  $t(\eta_i) > t(\omega_i)$ and $t(\eta_i) > t(\omega_{i+1})$.  Hence,
+  $t(\eta_i) > t(\omega)$ for every box
+  $\omega \in T_{n-1} \cap (D_i \cup D_{i+1})$ and so is new in $A_n$.
+
+  Therefore, for each pair $\set{i,i+1} \subset \Z/k\Z$, the set
+  $(D_i\cup D_{i+1})\cap A_n$ contains at least one new symbol, which
+  we shall denote $b_i$.  Note that if $\set{i,i+1}$ and $\set{j,j+1}$
+  are disjoint, then their respective symbols $b_i$ and $b_j$ must lie
+  in different diagonals modulo $k$, and so must be distinct.  Thus,
+  the minimum number of new symbols in $A_n$ coincides with the
+  minimum number of elements we can choose from $\Z/k\Z$ such that we
+  have at least one element in each pair $\set{i,i+1}$.  Suppose for
+  the sake of contradiction that we could achieve this with $l-1$
+  elements.  Each is a member of two pairs, so we cover at most
+  $2(l-1)<k$ pairs.  This is insufficient, as there are $k$ pairs, so
+  the minimum size of such a set is $l$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:tropicalPBN}]
+  We have already proved the case where $l > r$, so assume otherwise.
+  From \cref{prop:1} and our earlier remarks, we get that $T_r$
+  contains at least $\binom{l+1}{2} + l(r-l)$ distinct symbols.
+  Hence, $\codim V^r(\Gamma,\varphi)$ is bounded below by this
+  quantity.  Meanwhile, \cite[Corollary~6.2.2, Remark~6.2.3]{len2019skeletons}
+   implies that it is also
+  an upper bound, so we are done.
+\end{proof}
+
+\subsection{Relation to algebraic
+  geometry}\label{sec:algebraic-dim-proof}
+We are now in a position to prove \cref{cor:algebraicPBN}, restated
+below.  
+%The proof in this case is almost identical to the proof of
+%\cite[Theorem~B]{len2019skeletons} ; we provide the details for
+%completeness.
+
+\algebraicPBN*
+\begin{proof}
+  Let $r\geq -1$ and let $k$ any integer.  The proof will be complete
+  once we produce at least one unramified double cover
+  $f \maps \wti{X} \to X$ of genus $g$ in the $k$-gonal locus of
+  $\cR_g$ whose Prym--Brill--Noether locus has dimension bounded by
+  $g-1-n(r,k)$.
+  
+  Let $\varphi\maps\wti\Gamma\rightarrow \Gamma$ be a uniform
+  $k$-gonal folded chain of loops, and let
+  $f\maps \wti{X}\rightarrow X$ be a smoothing over a non-Archimedean
+  field $K$ \cite[Lemma~7.0.1]{len2019skeletons}.  By Theorem
+  \ref{thm:tropicalPBN}, the dimension of $V^r(\Gamma,\varphi)$ equals
+  $g-1-n(r,k)$, and from Baker's specialization inequality
+  \cite[Corollary 2.11]{Baker_specialization} we obtain
+  \begin{equation*}
+  \trop\big(V^r(X,f)\big) \subseteq V^r(\Gamma,\varphi).
+  \end{equation*} 
+  If $g-1<n(r,k)$, then the tropical Prym--Brill--Noether locus $V^r(\Gamma,\varphi)$ is empty and so the algebraic Prym--Brill--Noether locus  $V^{r}(X,f)$ is empty as well.   
+  
+  Otherwise, since both $\Gamma$ and $\wti\Gamma$ are trivalent and without vertex-weights, both of their Jacobians and  Prym varieties are maximally degenerate. Therefore we may apply Gubler's Bieri--Groves Theorem for maximally degenerate abelian varieties  \cite[Theorem 6.9]{Gubler_trop&nonArch} to conclude that 
+  \begin{equation*}
+  \dim V^r(X,f)=\dim \trop\big(V^r(X,f)\big)\leq \dim V^r(\Gamma,\varphi\big)=g-1-n(r,k).\qedhere
+  \end{equation*}
+\end{proof}
+
+Note that a general curve of genus $g\leq 2k-2$ is $k$-gonal, so by \cite{Welters_Prym}, the codimension of the Prym--Brill--Noether locus of a general curve is $\binom{r+1}{2}$. However, we believe that in all other cases, the bound we found is tight. 
+\begin{conjecture}
+  Suppose that $g> 2k-2$, and let  $f\maps\wti{C}\to C$ be a generic Prym curve. Then 
+  \[
+  \dim V^r(C,f) = g-1-n(r,k).
+  \]
+\end{conjecture}
+
+\section{Tropological properties}\label{sec:trop-results}
+
+As before, fix a folded chain of loops
+$\varphi\maps\wti\Gamma\to\Gamma$ of genus $g$ and gonality $k$.  In
+this section, we prove that the Prym--Brill--Noether locus
+$V^r(\Gamma,\varphi)$ is pure-dimensional and path-connected when the
+dimension is positive (in fact, we show that it is connected in codimension $1$).  To accomplish this, we develop the notions of strips and non-repeating
+tableaux, which will also be necessary for our genus computations in
+\cref{sec:counting}.
+
+\subsection{Strips and non-repeating tableaux}\label{sec:an-interl}
+%
+%\caelan{It may be cleaner in the long run to toss out the ``$t$
+%  non-repeating in $\mu$'' terminology in favor ``strip representative
+%  $(t, \mu)$'' or something along those lines.} \yoav{I too don't like
+%  the term ``non-repeating'', but strip representative doesn't sound
+%  strong enough. Maybe `determining' or `decisive'?}  
+
+% In this section, we establish a tool that will be crucial in proving
+% pure dimension and path connected in the case when $k$ is odd case.
+% In analogy with the results from \cref{sec:reflective}, we now prove
+% that for minimal tableaux there is an equivalent tableau which
+% contains a smaller subset of $T_r$ on which the tableaux is uniquely
+% determined.  \steven{I rewrote this to try and make it more clear
+% that each tableau is equivalent to one which is uniquely determined
+% by the strip, but we might consider going back to the original
+% statement.}  \yoav{The way this paragraph is currently phrased, it
+% sounds like every staircase tableau has a strip $\mu$ which
+% determines the rest of the tableau, which is not true, is it?}
+% \caelan{The qualifier ``up to equivalence'' is meant to suggest that
+% it is only true if you are allowed to replace your given tableau
+% with an equivalent one (i.e. they determine the same maximal cell of
+% the locus).  I guess this isn't clear; we can either remove it
+% entirely or add some more explanation.  I'm inclined to say ``We now
+% establish a tool that will be crucial in proving the odd case'' (or
+% something similar) and then jump right into the definition.} We
+% shall see that showing that the $V^r(\Gamma,\varphi)$ is
+% pure-dimensional reduces to checking that every staircase Prym
+% tableau is dominated by one of these tableau.
+
+We focus our attention on Prym tableaux of minimal codimension.  Since
+\cref{prop:reflective} implies that any such tableau is equivalent to a
+staircase Prym tableaux, it suffices to consider this restricted type.
+To simplfy our terminology, we shall say that a tableau is
+\textit{minimal} if it is a staircase Prym tableau of minimal
+codimension.
+
+In the generic case (or where $r \leq l$), minimal tableaux are
+relatively easy to classify, since they are precisely the standard
+Young tableaux on $T_r$.  By contrast, the cases of even and odd
+torsion both elude description.  The strip is a subset of $T_r$ on
+which minimal tableaux are determined up to equivalence.  This notion
+will be made precise in the following paragraphs.
+
+\begin{definition}
+  A subset $\mu \subset T_r$ is a \textit{strip} if $T_l \subset \mu$
+  and there exists a box in $\mu \cap A_n$ for each
+  $n \in \set{l,l+1,\ldots,r}$ called the \emph{$n$-th leftmost box}
+  that satisfies the following properties:
+  \begin{itemize}
+  \item $(1,l)$ is the $l$-th leftmost box, 
+  \item if $(x,y)$ is the $n$-th leftmost box, then the
+    $(n+1)$-th leftmost box is $(x,y+1)$ or $(x+1,y)$, and
+  \item if $(x,y)$ is the $n$-th leftmost box, then the boxes of
+    $\mu \cap A_n$ are precisely those of the form $(x+i,y-i)$ for
+    each $i \in \set{0,1,\ldots,l-1}$.
+  \end{itemize}
+  If $(x,y)$ is the $n$-th leftmost box, then we call $(x+l-1,y-l+1)$
+  the \textit{$n$-th rightmost box}.
+\end{definition}
+  
+Note that $\mu \cap A_n$ contains precisely $\min \set{n,\,l}$ boxes, any two
+of which are separated by cab distance at most $2l-2$.  This implies
+that any $k$-uniform tableau on $T_r$ must be injective on $\mu \cap A_n$ for
+all $n$ (though not necessarily on $T_r$).  Moreover, since we
+designate $(1,l)$ as the $l$-th leftmost box and choose each
+subsequent leftmost box out of two possibilities, it follows that
+$\mu$ may take on any of $2^{r-l}$ distinct shapes.
+
+$T_r\setminus\mu$ consists of two (possibly empty) contiguous
+components, which we shall call the \emph{left} and \emph{right}, respectively.  In
+particular, the left component of $T_r\setminus\mu$ (if it exists) the
+one that contains $(1,r)$.  We refer to the strip whose right component is empty as
+ the \textit{horizontal strip} and denote it by $\mu_0$. 
+We now introduce an subclass of  strips, which will play a key role for the rest of the paper. In what follows, $\epsilon=k\mod 2$. 
+
+\begin{definition}\label{def:2}
+  Given a strip $\mu$ and a map
+  $t\maps T_r \to [g-1]$ such that $t\restrict{\mu}$ satisfies the
+  tableau and displacement conditions, we say that $t$ is
+  \textit{non-repeating in $\mu$} if
+  \begin{enumerate}
+  \item\label{def:2a} $t(x,y) = t(x+l-\epsilon,y-l)$ for each $(x,y)$ in the
+    left component of $T_r\setminus\mu$,
+  \item\label{def:2b} $t(x,y) = t(x-l,y+l-\epsilon)$ for each $(x,y)$ in the
+    right component of $T_r\setminus\mu$, and
+  \item\label{def:2c} for all $n \in \set{l,l+1,\ldots,r-1}$, writing
+    the $n$-th leftmost box as $(x,y)$, then $(x,y+1)$ is the
+    $(n+1)$-th leftmost box if and only if $t(x,y) > t(x+l-\epsilon,y-l+1)$.
+  \end{enumerate}
+  We refer to Condition \ref{def:2c} as the \emph{gluing} condition.
+\end{definition}
+
+See \cref{fig:strip-example} for an example.  The usefulness of
+non-repeating tableaux is elucidated by the following result.
+% \cref{prop:18}.  Observe that the we have defined even non-repeating
+% tableaux only on the horizontal strip.  We could have defined it for
+% all strips, but in fact, any even tableau that is non-repeating in
+% this more general sense (whose details we leave to the reader to
+% work out) is also non-repeating on the horizontal strip.
+% Accordingly, in all results below that refer to ``tableaux that are
+% non-repeating in a strip'' without reference to the parity of the
+% torsion, read this as ``odd tableaux that are non-repeating in any
+% strip and even tableaux that are non-repeating in the horizontal
+% strip.''
+
+\begin{figure}[H]
+  \centering
+  \begin{ytableau}
+    20\\
+    18      & 21\\
+    15      & 17      & *(c1)23\\
+    11      & 14      & *(c1)20 & *(c1)24\\
+    *(c1)10 & *(c1)13 & *(c1)18 & *(c1)21 & *(c1)22\\
+    *(c1)8  & *(c1)12 & *(c1)15 & *(c1)17 & *(c1)19 & 20\\
+    *(c1)6  & *(c1)9  & *(c1)11 & *(c1)14 & *(c1)16 & 18 & 21\\
+    *(c1)3  & *(c1)5  & *(c1)7  & 8 & 12  & 15 & 17 & 19\\
+    *(c1)1  & *(c1)2  & *(c1)4  & 6 & 9   & 11 & 14 & 16 & 18\\
+  \end{ytableau}
+  \caption{A minimal tableau of size 9 and torsion 5 that is
+    non-repeating on the strip depicted in blue.}
+  \label{fig:strip-example}
+\end{figure}
+
+\begin{proposition}\label{prop:18}
+  Given a strip $\mu$, if $t$ is non-repeating in $\mu$, then $t$ is a
+  minimal tableau.
+\end{proposition}
+
+\begin{proof}
+  We first show that $t$ is staircase Prym.  The displacement
+  condition  follows from conditions
+  \ref{def:2a} and \ref{def:2b} in 
+  \cref{def:2}, since every symbol in $T_r \setminus \mu$ is copied
+  from a box that is distance $k$ away.
+
+  By definition, $t\restrict\mu$ satisfies the tableau condition, so
+  it remains to check that $t\restrict{T_r \setminus \mu}$ does as
+  well.  Consider the case where $k$ is odd.  Suppose the tableau
+  condition holds for the symbols in $T_n$, and let
+  $(x,y) \in A_{n+1}$ be a box in the left component; then $(x-1,y)$
+  is also in the left component.  Their symbols are copied from
+  $(x+l-1,y-l)$ and $(x+l-2,y-l)$, respectively.  The former lies
+  above the latter, and both are in $T_n$, so
+  $t(x+l-1,y-l) > t(x+l-2,y-l)$.  Then $t(x,y) > t(x-1,y)$, as we had
+  hoped.  A similar conclusion follows if $(x,y-1)$ is in the left
+  component.  However, it is possible that $(x,y-1)$ lies in $\mu$.
+  If it does, then it must be the $n$-th leftmost box; then the
+  $(n+1)$-th leftmost box must be $(x+1,y-1)$, which by the gluing
+  condition implies that $t(x,y-1) < t(x+l-1,y-l) = t(x,y)$, as
+  desired.
+
+  By transposing the first and second coordinates, we see that the
+  argument above also works for boxes in the right component.
+  Moreover, a very similar argument proves it in the case that $k$ is
+  even.  Then in both cases, $t$ satisfies the tableau condition
+  everywhere by induction, so $t$ is staircase Prym.  To see that $t$
+  is minimal, realize that $t$ has precisely $l$ new symbols on each
+  anti-diagonal, since every symbol not in $\mu$ is repeated from
+  within $\mu$.  It is not hard to see that $\codim(t) = n(r,k)$, so
+  $t$ has minimal codimension.
+\end{proof}
+
+\begin{lemma}\label{lem:19}
+  Fix $\mu$ a strip and $D_i$ a diagonal modulo $k$.  Then for any map
+  $t$ non-repeating in $\mu$ and any boxes
+  $\omega \in \mu \cap A_m \cap D_i$ and
+  $\omega' \in \mu \cap A_n \cap D_i$ with $m < n$, we have that
+  $t(\omega) < t(\omega')$.
+\end{lemma}
+\begin{proof}
+  The statement is true for $n \leq l$ by the tableau condition since
+  $D_i \cap T_l$ is contained in a single diagonal.  We proceed by
+  induction on $n$.  Suppose that the statement is true in $T_n$, and
+  let $\omega'$ be a box in $\mu \cap A_{n+1} \cap D_i$.  Then it
+  suffices to show that $t(\omega) < t(\omega')$ for
+  $\omega \in \mu \cap A_m \cap D_i$ where $m \leq n$ is the maximum
+  index such that $\mu \cap A_m \cap D_i$ is nonempty. We shall break
+  into cases when $k$ is odd or even.
+
+  When $k$ is odd, let $(x,y)$ be the $n$-th leftmost box, and assume
+  without loss of generality (by transposing the coordinates if
+  necessary) that $(x+1,y)$ is the $(n+1)$-th leftmost box.  If
+  $\omega'$ is the $(n+1)$-th rightmost box $(x+l,y-l+1)$, then
+  $m = n$ and $\omega = (x,y)$.  The desired result then obtains by
+  the gluing condition.  If $\omega'$ is any other cell $(x',y')$ in
+  $\mu \cap A_{n+1} \cap D_i$, it is not hard to see that
+  $\mu \cap A_n \cap D_i$ is empty and $\mu \cap A_{n-1} \cap D_i$
+  contains precisely one box, namely, $(x'-1,y'-1)$.  Then the tableau
+  condition implies the desired result.
+  
+  Now consider the case where $k$ is even.  Let
+  $\omega'=(x',y')\in \mu \cap A_{n+1}\cap D_i$.  We note that
+  $D_i \cap A_n$ is nonempty precisely when $i$ and $n$ differ in
+  parity, so in this case, $D_i \cap A_n$ is empty.  If $y' \neq 1$,
+  then $\omega = (x'-1,y'-1)$ satisfies the desired properties.
+  Otherwise, if $y' = 1$, take $\omega = (x'-l-1,l)$.
+\end{proof}
+
+\begin{proposition}\label{prop:2}
+  Given two tableaux $t$ and $s$ that are non-repeating in $\mu$ and
+  $\nu$ respectively, $t$ and $s$ are equivalent if and only if
+  $\mu=\nu$ and $t\restrict\mu = s\restrict\nu$.
+\end{proposition}
+
+\begin{proof}[Proof of \cref{prop:2}.]  
+  Suppose that $t$ and $s$ are equivalent, and assume for the time
+  being that $\mu = \nu$.  
+%  (If $k$ is even, this condition is
+%  trivially satisfied since $\mu = \nu = \mu_0$.)  
+  Because
+  $t(D_i) = s(D_i)$ for each $i$, the total ordering on the boxes of
+  $\mu \cap D_i$ given by \cref{lem:19} forces
+  $t\restrict{\mu} = s\restrict{\mu}$.  Now suppose for the sake of
+  contradiction that $\mu \neq \nu$.  Let $n$ be the smallest index
+  such that $\mu \cap A_{n+1} \neq \nu \cap A_{n+1}$; note that
+  $n \geq l$.  Applying the argument above to the restricted domain
+  $T_n$, we have that
+  $t\restrict{\mu \cap T_n} = s\restrict{\nu \cap T_n}$.  Then the
+  gluing condition on $\mu$ and $\nu$ forces the $(n+1)$-th leftmost
+  box of each to be the same, so $\mu \cap A_{n+1} = \nu \cap A_{n+1}$, a
+  contradiction.
+
+  The converse trivially follows from \cref{def:2}.
+\end{proof}
+
+\begin{proposition}\label{prop:14}
+  Given a staircase Prym tableau $t$, there exist a strip $\mu$ and a
+  tableau $s$ that is non-repeating in $\mu$ such that $s$ dominates
+  $t$. Moreover, in the even case, this strip may be chosen to be horizontal. 
+\end{proposition}
+\begin{proof}
+	First suppose that $k$ is odd.  
+  We begin by defining a tableau $s_l = t\restrict{T_l}$ and a
+  strip $\mu_l = T_l$, and proceed by induction: suppose that we
+  have defined a tableau $s_n$ on $T_n$ that is non-repeating on a
+  strip $\mu_n \subset T_n$, and suppose that
+  $s_n\restrict{\mu_n} = t\restrict{\mu_n}$.
+  Let $(x,y)$ be the $n$-th leftmost
+  box; then $(x+l-1,y-l+1)$ is the $n$-th rightmost box.  Recall that
+  $t(x,y) \neq t(x+l-1,y-l+1)$ because $t\restrict{\mu_n \cap A_n}$
+  must be injective.  Define the strip $\mu_{n+1}$ so that
+  $\mu_{n+1}\restrict{T_n} = \mu_n$ and the $(n+1)$-leftmost box is
+  $(x,y+1)$ just if $t(x,y) > t(x+l-1,y-l+1)$.  Then take $s_{n+1}$ to
+  be the map so that
+  $s_{n+1}\restrict{\mu_{n+1}} = t\restrict{\mu_{n+1}}$ and
+  $s\restrict{A_{n+1} \setminus \mu}$ is defined according to
+  conditions \ref{def:2a} and \ref{def:2b} of \cref{def:2}.  Clearly,
+  $s_{n+1}$ is non-repeating in $\mu_{n+1}$ and dominates
+  $t\restrict{\mu_{n+1}}$, so take $s = s_r$.
+  Having defined $s$ on all of $T_r$, observe that $s$ is
+  non-repeating in $\mu$, so $s$ is staircase Prym by \cref{prop:18},
+  and hence has minimal codimension.  Moreover,
+  $s\restrict{\mu} = t\restrict{\mu}$ and $s$ contains no other
+  symbols besides those in $\mu$, so $s$ dominates $t$.
+
+  If $k$ is even, we may find a dominating non-repeating strip similarly to the odd case with minor adjustments. However, as we now show, we may choose this strip to be the horizontal strip $\mu_0$. In other words, we need to construct a minimal dominating tableau $s$ such that $s(x,l)< s(x+l,1)$ for every $x$.
+
+  First,
+  define $s\restrict{T_l} \coloneq t\restrict{T_l}$.  These symbols are
+  all unique in $T_l$, and $s\restrict{T_l}$ obey the tableau
+  condition.
+  We now proceed to define $s$ by induction on the anti-diagonals
+  $A_n$.  Let $n \geq l$, and suppose that $s\restrict{T_n}$ is defined
+  and obeys the tableau and displacement conditions.  For each
+  $(x,y)\in A_{n+1} \cap D_i$, define $s(x,y)$ to be the maximal value
+  of $t$ on $A_{n+1}\cap D_i$.  We claim that the tableau condition is
+  still satisfied.  In particular, given $(x,y)\in A_{n+1} \cap D_i$,
+  we claim that $s(x,y)$ is greater than both $s(x-1,y)$ and
+  $s(x,y-1)$ (whenever these values are defined). Indeed, $s(x-1,y) = t(x',y')$ for
+  $(x',y')\in A_n \cap D_{i-1}$. Therefore, $t(x',y')<
+  t(x'+1,y')$. But $(x'+1,y')\in A_{n+1}\cap D_i$, so by construction
+  $s(x,y)\geq t(x'+1,y')>t(x',y')=s(x-1,t)$.  The other inequality
+  holds by a similar argument. 
+  
+    Note that $s$ dominates $t$ by construction. Moreover, $s$ has
+  exactly $l$ new symbols on every anti-diagonal $A_n$ for $n\geq l$,
+  and is therefore minimal.  Moreover, by construction along with the tableau condition we have $s(x,l)< s(x,l+1)=s(x+l,1)$, so the gluing condition is satisfied as well.
+\end{proof}
+
+The fact that the Prym--Brill--Noether  locus is pure dimensional readily follows from the results of this section. 
+
+\begin{proposition}\label{thm:pure-dim}
+	$V^r(\Gamma,\varphi)$ is pure-dimensional for any gonality $k$.
+\end{proposition}
+
+\begin{proof}
+	Given a Prym tableau $t$, we want to find a Prym tableau $s$ that
+	dominates $t$ and has minimal codimension (i.e., it attains
+	$\codim(s) = n(r,k)$).  Apply the reflection algorithm of
+	Proposition \ref{prop:reflective} to $t$; the resulting tableau $u$
+	dominates $t$.
+	It is sufficient to consider the staircase Prym tableau
+	$v = u\restrict{T_r}$.  In the case of generic edge lengths or
+	$r \leq l$, every symbol is $v$ is necessarily unique, so we are
+	done.  Otherwise, apply \cref{prop:14} to obtain a minimal tableau
+	$s$ which dominates $v$.
+\end{proof}
+
+% To this end, we need to establish several basic facts.  (Recall that $k = 2l$ in the even case.)
+%
+%\begin{lemma}\label{lem:4}
+%  For $k$ even and $n \geq l$, $A_n \cap D_i$ is nonempty just if $n$
+%  and $i$ differ in parity.
+%\end{lemma}
+%
+%\begin{proof}
+%  Note that the parity of $i$ is well-defined because $k$ is even.
+%  Without loss of generality, assume that
+%  $i \in \set{-l+1,-l+2,\ldots,l-1,l}$.  Suppose first that $n$ and
+%  $i$ differ in parity.  If we let
+%  \begin{align*}
+%    x &= \frac{1}{2}(n+1+i) \\
+%    y &= \frac{1}{2}(n+1-i),
+%  \end{align*}
+%  then it is clear that $x$ and $y$ are both positive integers.
+%  Moreover, $x+y=n+1$ and $x-y=i$, so the box $(x,y)$ is in both
+%  $A_n$ and $D_i$.
+%
+%  Now suppose that $A_n \cap D_i$ is nonempty.  Then there exists a
+%  box $(x,y)$ for which $x+y=n+1$ and $x-y=i+mk$ for some $m \in \Z$.
+%  Manipulating these equations, we get $n+i=2x-2ml-1$, so
+%  $n+i \equiv 1 \pmod 2$, as desired.  (Note that we did not need the
+%  assumption that $n \geq l$ for this direction.)
+%\end{proof}
+%
+%\begin{corollary}\label{cor:2} 
+%  For $k$ even and $n \geq l$, $A_n$ intersects precisely $l$
+%  diagonals modulo $k$.
+%\end{corollary}
+%\yoav{Combine this corollary with the previous lemma by saying, ``in particular...".}
+%
+%\begin{proof}
+%  This follows immediately from Lemma \ref{lem:4} and the fact that
+%  there are exactly $l$ integers of each parity in the set
+%  $\set{0,1,\ldots,k-1}$.
+%\end{proof}
+  
+\subsection{Path-connectedness}
+In this section, we shall occupy ourselves with the following result.
+
+\begin{proposition}\label{thm:path}
+  If $\dim V^r(\Gamma,\varphi) \geq 1$, then $V^r(\Gamma,\varphi)$ is
+  connected in codimension 1.  
+\end{proposition}
+
+We may write
+$V^r(\Gamma,\varphi) = \bigcup_{\alpha \in I} P(t_\alpha)$ for a
+finite indexing set $I$ and some collection of staircase Prym tableau
+$\set{t_\alpha}_{\alpha \in I}$.  Without loss of generality, we
+choose this collection to be minimal in the sense that $t_{\alpha}$
+dominates $t_{\beta}$ only if $\alpha = \beta$.  By
+\cref{thm:pure-dim}, we know that each $t_{\alpha}$ is minimal.
+
+Each subspace $P(t_\alpha)$ is a torus.
+ To prove that $V^r(\Gamma,\varphi)$ is
+ connected in codimension $1$, it suffices to show that for any $\beta$ and $\gamma$ in $I$, there
+is a sequence $(\alpha_p)_{p=0}^n$ in $I$ with $\alpha_0 = \beta$
+and $\alpha_n = \gamma$, such that $P(t_{\alpha_p})$ and
+$P(t_{\alpha_{p+1}})$ intersect at a torus of codimension $1$ for each $p$.
+Note that the last condition is equivalent to the property that for
+any indices $i \neq j \in \set{0,1,\ldots,k-1}$, the sets of symbols
+$t_{\alpha_p}(D_i)$ and $t_{\alpha_{p+1}}(D_j)$ have empty
+intersection; indeed, a symbol $h$ appearing in both sets would impose
+contradicting conditions on the placement of chips on the $h$-th loop.
+% $t_{\alpha_p}$ and $t_{\alpha_{p+1}}$ having the property that, for
+% each distinct pair of indices $i, j \in \Z/k\Z$,
+% $t_{\alpha_p}(D_i) \cap t_{\alpha_{p+1}}(D_j) = \emptyset$.
+Call any two such staircase Prym tableaux \textit{adjacent}.  An
+observation that will be useful in proving \cref{thm:path} in the odd
+case is that two staircase Prym tableaux are adjacent if there exists
+a third that is dominated by each of them.
+% \yoav{Is that entirely obvious?  I mean, if two components intersect
+% non-trivially, is it clear that their intersection is described by a
+% tableau?}  \caelan{I think we only need the reverse direction, so
+% I've made the change to reflect that.  You're right, it isn't
+% obvious.}
+
+We now define several terms that will be useful for reliably
+generating paths of adjacent tableaux.  Let $t$ be a minimal tableau.
+Since $\dim V^r(\Gamma,\varphi) \geq 1$, there is some symbol $a$ not
+appearing in $t$.  Choose some box $(x,y)$, and define $s(x,y) = a$
+and $s(\omega) = t(\omega)$ for all $\omega \neq (x,y)$.  We call this
+procedure \textit{swapping $a$ into $(x,y)$}.  In general, $s$ will
+not satisfy the tableau condition; we need to check that
+$t(x-1,y) < a$, $t(x,y-1) < a$, $t(x+1,y) > a$, and $t(x,y+1)$.  (We
+may also check that $t(x,y) > a$ or $t(x,y) < a$ to verify the last
+two or last two inequalities, respectively.)  Given that the tableau
+condition is satisfied, it is not hard to see that $s$ is a staircase
+Prym tableau that is adjacent to $t$.  However, $s$ is minimal if and
+only if the symbol $t(x,y)$ does not appear anywhere else in $t$.
+
+Thus, we introduce the related notion of \textit{swapping $a$ in for
+  $b$}.  Given $t$ and $a$ as above, pick a symbol $b$.  If $b$ does
+not appear in the tableau, define $s = t$ (i.e., do nothing).
+Otherwise, for each box $\omega \in t^{-1}(b)$, define
+$s(\omega) = a$, and for each $\omega' \nin t^{-1}(b)$, define
+$s(\omega') = t(\omega')$.  The tableau condition must again be
+checked, this time at each box $\omega$.  Supposing that it holds, $s$
+satisfies the displacement condition because $t$ does, $t$ and $s$ are
+adjacent, and $s$ is minimal.
+
+It is straightforward to check that we may always swap $a$ in for
+$a+1$ and $a$ in for $a-1$.  Hence, if $t$ and $a$ are as above, and
+there is a symbol $b > a$ that we want to pull out of the tableau, we
+iterate the following procedure: at the $i$-th step, $a+i$ is not in
+the tableau, so swap $a+i$ in for $a+i+1$.  After $b-a$ steps, each
+symbol $a+i$ in $t$ for $i \in [b-a]$ has been decremented by 1.  In
+particular, $b$ no longer appears in the tableau.  An analogous
+procedure may be used in the case that $b < a$; in either case, we
+call this \textit{cycling out $b$}.
+
+\begin{remark}
+Both swapping and  cycling  use at most a single additional symbol than is already in the tableau.  As a consequence,
+any path of tableaux produced via these operations is connected in codimension 1.
+\end{remark}
+
+
+% Assume first that $b<a$.  If $b$ is the largest symbol in $t$ such
+% that $b<a$, we may simply replace $b$ for $a$ to obtain a new
+% staircase Prym tableau that is adjacent to $t$.  Otherwise, denote
+% $b_0=b<b_1<\ldots<b_n$ the symbols in $t$ that are strictly smaller
+% than $a$. By repeatedly replacing $b_n$ with $a$ and each $b_{i+1}$
+% with $b_i$ for $0\leq i<n-1$, we obtain a sequence of adjacent
+% tableaux, the last of which satisfies the required properties.
+% \caelan{More than one property?}  We refer to this process as
+% \emph{cycling} $a$ in for $b$. A similar algorithm works in the case
+% that $a<b$. Note that this process does not change the codimension
+% of the tableau.
+%
+% Given a staircase Prym tableau $t$ of minimal codimension, the fact
+% that $\dim V^r(\Gamma,\varphi) \geq 1$ implies that there is some
+% symbol $a$ not appearing in $t$.  We shall say that $a$ is
+% \textit{in reserve}.  We may replace all occurences of a symbol $b$
+% in $t$ with $a$; if the resulting map $s$ still satisfies the
+% tableau condition, then $s$ is a staircase Prym tableau of minimal
+% codimension that is adjacent to $t$ and has $b$ in reserve.  Call
+% this \textit{swapping in $a$ for $b$}.  If we want to replace a
+% symbol appearing in a particular box $\omega$ (and not necessarily
+% every occurence of that symbol in $t$), we will say that we are
+% swapping $a$ into $\omega$.  Note that if the resulting map is a
+% tableau $s$, then $s$ will be dominated by $t$, and $P(s)$ will have
+% codimension 1 in $P(t)$.  \caelan{Rework to account for cases where
+% $b$ is not in the tableau; then redefine cycling below as well.}
+%
+% For any symbol $a$ (whether in $t$ or not), let $a_-$ and $a_+$
+% denote the greatest symbol in $t$ smaller than $a$ and the smallest
+% symbol in $t$ greater than $a$, respectively.  Then it is not hard
+% to see that if $a$ is in reserve, it may always be swapped in for
+% $a_-$; likewise, $a$ may always be swapped in for $a_+$.  Hence, if
+% $b < a$, we iteratively swap $a$ in for $a_-$, then $a_-$ in for
+% $(a_-)_-$, etc., until the final step, at which we swap in $b_+$ for
+% $b$.  An analogous process works in the case that $b > a$.  In
+% either case, we shall call this process \textit{cycling $a$ in for
+% $b$}.  If $b$ The tableau obtained at each step is adjacent to the
+% previous, so the starting tableau (with $a$ in reserve) and ending
+% tableau (with $b$ in reserve) are connected by a path.
+
+Given any subset $\lambda$ of $\N^2$, we establish a total order on
+its boxes as follows: given $(x,y) \in \lambda \cap A_m$ and
+$(x',y') \in \lambda \cap A_n$, say that $(x,y) < (x',y')$  if
+$m < n$, or if both $m = n$ and $x < x'$.  Let
+ $Q_{\lambda}(\omega)$
+be the number of boxes $\omega' \in \lambda$ for which
+$\omega' \leq \omega$.
+%
+%$Q_{\lambda} \maps \lambda \to \N$ 
+%be the ordering function
+% \caelan{Is
+%  there a more colloquial name for this?}, i.e., $Q_{\lambda}(\omega)$
+%is the number of boxes $\omega' \in \lambda$ for which
+%$\omega' \leq \omega$.
+Then we define an $\N$-valued function $V_{\lambda}$ on the set of
+tableaux that are injective on $\lambda$ by
+\begin{equation*}
+  V_{\lambda}(t) \coloneq \card{\lambda} - \max \set{Q_{\lambda}(\omega)
+    \given t(\omega') = Q_{\lambda}(\omega') \text{ for all }
+    \omega' \leq \omega}.
+\end{equation*}
+We denote by $\bar{t}$ the unique tableau for which
+$V_{\lambda}(t) = 0$; call it the \textit{standard increasing
+  tableau}.  For example, if $\lambda = T_4$, then $\bar{t}$ is the
+final tableau in \cref{fig:4}.  Intuitively, $V_{\lambda}$ measures
+how far a given tableau is from being identical to $\bar{t}$.
+
+We are now equipped to prove \cref{thm:path} in the case of generic
+edge length.
+
+\begin{proof}[Proof in the generic case.]
+  We will show by induction on $V_{T_r}$ that any injective tableau
+  $t$ defined on $T_r$ has a path to the standard increasing tableau
+  $\bar{t}$.  If $V_{T_r}(t) = 0$, then the statement is trivially
+  true since it must be the case that $t = \bar{t}$.  Otherwise,
+  suppose that any tableau $s$ with $V_{T_r}(s) < V_{T_r}(t)$ is
+  connected by a path to $\bar{t}$.  Then it suffices to show that $t$
+  has a path to some such $s$.
+  
+  Let $(x,y)$ be the smallest box such that
+  $t(x,y) \neq Q_{T_r}(x,y)$.  Denote $a =Q_{T_r}(x,y)$.  Let $S$ be
+  the set of boxes that are strictly smaller than $(x,y)$; then each
+  of these boxes $\omega$ contains the corresponding symbol
+  $Q_{T_r}(\omega)$, which is less than $a$.  We aim to produce a
+  tableau that has a path  to $t$, agrees with $t$ (and hence
+  with $\bar{t}$) on $S$, and has $a$ in the box $(x,y)$.  Indeed,
+  cycle out $a$ and call the resulting tableau $u$; since $t(x,y)$ and
+  $a$ are both greater than $a - 1$, no box of $S$ is affected.  Then
+  swap $a$ into $(x,y)$ and call the resulting tableau $s$.  Again,
+  this does not alter symbols in $S$.  Moreover, $s$ satisfies the
+  tableau condition since $a < u(x,y)$ and $(x-1,y)$ and $(x,y-1)$
+  both are in $S$ and hence contain symbols that are smaller than $a$.
+  Finally, $s$ has $a$ is in the correct box, so
+  $V_{T_r}(s) \leq V_{T_r}(t) - 1$, completing the proof.
+\end{proof}
+
+\begin{example}\label{ex:2}
+  We now exhibit a sequence of tableaux starting at a given arbitrary
+  tableau and terminating at the standard increasing tableau. The
+  shaded boxes in \cref{fig:4} represent the set $S$ at each step of
+  the algorithm that derives from the proof of the generic
+  case. First, we wish to move the symbol $3$ to the $(1,2)$
+  position. To that end, we first cycle out $3$ for $11$, then cycle
+  in $3$ for $6$. We then repeat the same process to move $5$ to the
+  $(2,2)$ position, and so on.
+  % In the first step, $11$ is the free symbol, and we want $3$ to be
+  % free; therefore, we cycle out $3$ with $11$. Thus, $3$ is a free,
+  % and we insert $3$ into its proper position for increasing
+  % anti-diagonal order. At this point we have that $1,..,4$ are in
+  % the correct boxes, and $6$ is free. We then cycle out $5$ with
+  % $6$, and continue in this fashion until we arrive at the
+  % increasing anti-diagonal representative.
+  \begin{figure}[H]
+    \input{figures/path-connected-generic-ex.tex}
+    \caption{Example of swapping symbols to get a tableau to the
+      increasing anti-diagonal representative. The shaded boxes
+      represent boxes which contain the correct symbol for the
+      increasing anti-diagonal representative \caelan{This caption
+        needs to be updated with the new terminology, and each tableau
+        needs to be transposed (since boxes in the same anti-diagonal
+        should be ordered so that smaller boxes have smaller
+        $x$-coordinates.}}
+  \label{fig:4}
+  \end{figure}
+\end{example}
+
+To prove the even and odd cases, we make use of the theory of
+non-repeating tableaux developed in \cref{sec:an-interl}.  We shall
+define our ordering on the horizontal strip $\mu$; the fact that the
+proof of \cref{thm:path} in the generic case was more or less agnostic
+as to the particular shape of the tableau will allow us to skip many
+of the details in the subsequent proofs.
+
+\begin{proof}[Proof of \cref{thm:path} in the even case.]
+  Let $\bar{t}$ be the unique tableau non-repeating in the horizontal
+  strip $\mu_0$ that extends the standard increasing tableau on
+  $\mu_0$.  Given any $t$ non-repeating in $\mu_0$, we can repeat the
+  procedure from the proof in the generic case that inducts on
+  $V_{\mu_0}(t)$: as before, we cycle out $a$ to produce $u$, but
+  instead of swapping $a$ just into $(x,y)$, we swap it in for the
+  symbol $u(x,y)$.  In particular, this operation swaps $a$ into the
+  boxes $\omega_i = (x-il,y+il)$ for each $i \in \Z_{\geq 0}$ such
+  that $\omega_i \in T_r$.  Again, call the resulting tableau $s$.  It
+  suffices to check that $s$ satisfies the tableau condition at each
+  $\omega_i$; as long as this holds, the fact that
+  $V_{\mu_0}(s) \leq V_{\mu_0}(t) - 1$ finishes the proof.
+
+  Suppose first that $2 \leq y \leq l-1$.  Then the same argument that
+  we used in the proof of the generic case demonstrates that $s$
+  satisfies the tableau condition at $\omega_0$, and the fact that the
+  boxes distance 1 from $\omega_i$ are all copied from the respective
+  boxes that are distance 1 from $\omega_0$ implies that the tableau
+  condition is satisfied everywhere.  If $y = l$, the same argument
+  works once we note that $u(x,y+1) = u(x+l,1)$ and $(x+l,1)$ is not
+  in $S$.  Finally, in the case that $y = 1$, the tableau condition
+  holds at $\omega_0$, but since there is no box $(x,y-1)$, we may
+  worry that $a < s(x-l,l)$, thereby violating the tableau condition
+  at $\omega_1 = (x-l,l+1)$.  These worries are not warranted:
+  $(x-l,l)$ is in $S$ and hence contains a symbol less than $a$.  Then
+  the tableau condition is satisfied at $\omega_i$ for $i > 1$ for
+  much the same reason as before.
+\end{proof}
+
+The odd case is more difficult than the even case because we cannot
+only consider the horizontal strip: by \cref{prop:14}, each of the
+$2^{r-l}$ strips determine a unique set of maximal cells of
+$V^r(\Gamma,\varphi)$.  We must therefore show not only that there is
+a path between any two tableaux non-repeating in the horizontal strip,
+but also that there is a path between any tableau non-repeating in some
+strip and a tableau non-repeating in the horizontal strip.  It is the
+latter that we will primarily be occupied with proving.
+
+We construct a \textit{height function} as follows: given a tableau
+$t$ of odd torsion which is non-repeating in $\mu$, define $H(t)$ to
+be the second coordinate of the $r$-th leftmost box of $\mu$.  Note
+that $H$ is well-defined by \cref{prop:14}.  Moreover, $H(t) = l$ if
+and only if $\mu$ is the horizontal strip. 
+To simplify the notation in the following proof, we introduce the unit
+vectors $\hat x$ and $\hat y$ to describe boxes relative to other
+boxes.  For example, if $\omega = (x,y)$, then
+$\omega + \hat x = (x+1,y)$ and $\omega - \hat y = (x,y-1)$.
+
+\begin{proof}[Proof of \cref{thm:path} in the odd case.]
+  Let $\bar{t}$ be the odd tableau non-repeating in the horizontal
+  strip $\mu_0$ such that $\bar{t}\restrict{\mu_0}$ is the standard
+  increasing tableau on $\mu_0$.  Suppose that $t$ is another tableau
+  non-repeating in $\mu_0$; then an argument analogous to the one
+  given in the even case yields a path between   $t$ and
+  $\bar{t}$.  Therefore, the statement holds for any tableau $t$ for which $H(t) = l$.
+
+  Now take $\bar{t}$ as before, but let $\mu$ be any strip and $t$ any
+  tableau non-repeating in $\mu$.  To prove that there is a path from
+  $t$ to $\bar{t}$, we induct on $H(t)$.  We just argued that the base
+  case, $H(t) = l$, holds.  Suppose then that every $s$ for which
+  $H(s) < H(t)$ has a path to $\bar{t}$.  Denote by $(x,y)$ the
+  unique box in $\mu$ for which $y = H(t)$ and $(x-1,y) \nin \mu$.
+  Denote its anti-diagonal by $A_q$, and let $n = r - q$.  Then define
+  $\psi_i \coloneq (x+i,y)$ for each $i \in \set{0,1,\ldots,n}$.
+  Since $H(t) = y$, $\psi_i$ is the $(q + i)$-th leftmost box for all
+  $i$, and in particular, $\psi_n$ is the $r$-th leftmost box.
+
+  Our goal is to connect $t$ by a path to a tableau $s$ non-repeating
+  in $\nu$, where $\nu$ is the strip that agrees with $\mu$ up to
+  $A_{q-1}$ but has every subsequent leftmost box one step in the
+  $\hat x$ direction.  (In particular, the $q$-th leftmost box of
+  $\nu$ is $(x+1,y-1)$, not $(x,y)$.)  Since $H(s) = H(t) - 1$, if we
+  can construct such an $s$, then we are done.
+
+  Observe that $\psi_i$ is in the left component of
+  $T_r \setminus \nu$.  Hence, by \cref{def:2}, we need
+  $s(\psi_i) = s(\omega_{i,0})$, where
+  $\omega_{i,0} \coloneq (x+l-1+i,y-l)$.  Note that $\omega_{0,0}$ is
+  in $\mu$, while for each $i \geq 1$, $\omega_{i,0}$ is in the right
+  component of $T_r \setminus \mu$.  Then for each $i \geq 1$, we have
+  that $t(\omega_{i,0}) = t(\psi_i - \hat x - \hat y)$.  More
+  generally, for each $j \geq 0$ we define
+  $\omega_{i,j} = (x+l-1+i+jl,y-l-j(l-1))$; then for all $i$ and
+  $j \geq 1$, we have $t(\omega_{i,j}) = t(\omega_{i,0})$ and
+  $s(\omega_{i,j}) = s(\omega_{i,0})$; this again follows by
+  \cref{def:2}, since $\omega_{i,j}$ is in the right component of both
+  $T_r \setminus \mu$ and $T_r \setminus \nu$ for $j \geq 1$.  See
+  \cref{fig:pathoddproof} for a schematic diagram of our notations.
+
+  To go from $t$ to $s$, we could try to replace the symbol in
+  $\omega_{i,j}$ with the symbol in $\psi_i$ for each $i$ and $j$, and
+  leave all other symbols unchanged.  This operation does not change
+  the diagonal modulo $k$ in which any symbol lives; this, combined
+  with the fact that $t$ is minimal, would imply that $t$ and $s$ are
+  equivalent.  This should be an immediate cause for worry, since, by
+  \cref{prop:2}, two tableaux that are non-repeating on different
+  strips cannot be equivalent.  The tableau condition must fail
+  somewhere.  In fact, it fails precisely at $\omega_{n,0}$, which
+  lies on $A_{r-1}$.  Indeed, we have
+  $t(\psi_n) > t(\psi_n - \hat y) = t(\omega_{n,0}+ \hat x)$; it is
+  also possible (though not necessary) that
+  $t(\psi_n) > t(\omega_{n,0} + \hat y)$.  This cause a failure of the
+  tableau condition when we attempt to copy the symbol $t(\psi_n)$
+  into $\omega_{n,0}$.  We shall modify $t$ so that these issues are
+  avoided; in particular, we will put the two largest symbols, $g-2$
+  and $g-1$, into $\omega_{n,0} + \hat y$ and $\omega_{n,0} + \hat x$,
+  respectively.  Afterwards, we shall verify that the tableau
+  condition does not fail anywhere else.
+
+  Cycle out $g-2$ and swap it into $\omega_{n,0} + \hat y$.  Then
+  cycle out $g-1$ and call the resulting tableau $v$.  We need to
+  verify that the swap preserves the tableau condition.  (This is
+  sufficient because cycling always preserves the tableau condition.)
+  Indeed, note that $\omega_{n,0} + \hat y$ is the $r$-th rightmost
+  box of $\mu$; neither $\omega_{n,0}$ nor
+  $\omega_{n,0} - \hat x + \hat y$ can contain the symbol $g-1$ after
+  the first cycling operation (since neither box is on $A_r$), and
+  every other symbol is smaller than $g-2$, so the tableau condition
+  is satisfied.  The same is true in $v$.  Moreover, $v$ is
+  non-repeating in $\mu$ and has a path to $t$.
+
+  \caelan{It may be simpler at this point to assume that $t$ had the
+    form of $v$ from the start.}  Now we swap $g-1$ into
+  $\omega_{n,0} + \hat x$ to produce a tableau $u$.  Much as before,
+  the tableau condition is satisfied.  However,
+  $\omega_{n,0} + \hat x$ is in the right component of
+  $T_r \setminus \mu$ symbol, and in particular,
+  $v(\omega_{n,0} + \hat x) = v(\psi_n - \hat y)$; hence, we have
+  added a symbol (namely, $g-1$) to the tableau without removing every
+  instance of another, so the codimension of $P(u)$ relative to
+  $V^r(\Gamma,\varphi)$ is 1.  The consequence is that we cannot
+  perform any more swaps or cycles: in general,
+  $\dim V^r(\Gamma,\varphi)$ is no more than 1, so there are not
+  necessarily any symbols in $[g-1]$ that do not appear in $u$ and
+  with which we may perform those operations.  Our only recourse is to
+  show that $u$, which has a path to $t$ and is dominated by
+  $v$, is also dominated by some $s$ non-repeating on $\nu$.
+
+  To do this, we construct $s$ from $u$ in the same way that we
+  attempted to construct $s$ from $t$.  Precisely, for each $i$ and
+  $j$, we define $s(\omega_{i,j}) = u(\psi_i)$ and let $s$ coincide
+  with $u$ everywhere else.  Then it is not difficult to see that $s$
+  satisfies the displacement condition and (strictly) dominates $u$.
+  Moreover, $s$ is non-repeating in $\nu$ provided that the tableau
+  condition holds everywhere.
+
+  \begin{figure}[H]
+    \input{figures/path-connected-odd-schematic.tex}
+    \caption{\caelan{We need to figure out what exactly this figure
+        should display.  I'm imagining something like the two tableaux
+        on the top, where they both show the notation, the left one
+        shows $\mu$ and the boxes from which the $\omega_{i,0}$ are
+        repeated in $u$, and the right on shows $\nu$ and the boxes
+        from which $\psi_i$ are repeated in $s$.  Though as they
+        currently are, the diagrams are not super clear.} The tableau
+      on the left represents $u$, and we have outlined the strip of
+      the tableau before $g-1$ was swapped into $(x'+1,y'-1)$. In this
+      tableau, the box containing $e$ corresponds to $\omega_{0,0}$;
+      likewise, the box containing $b_i$ not in the strip corresponds
+      to $\omega_{i+1,0}$. The tableau on the right represents $s$, we
+      note that the $\omega_{i,j}$ have been replaced by the
+      $a_i$'s. We note that $e$ will no longer appear in the tableau
+      making $s$ minimal, the strip of $s$ has been outlined.}
+    \label{fig:pathoddproof}
+  \end{figure}
+
+  We need to check that the tableau condition is preserved at each
+  $\omega_{i,j}$.  In fact, it suffices to check the case where
+  $j = 0$ because the symbols in the boxes distance 1 from
+  $\omega_{i,j}$ are copied from the respective boxes distance 1 from
+  $\omega_{i,0}$.  To that end, consider first $\omega_{i,0}$ for
+  $1 \leq i \leq n-1$.  Then satisfaction of the tableau condition at
+  $\omega_{i,0}$ follows from the following computations:
+  \begin{align}
+    \label{eq:13} &s(\omega_{i,0}) = u(\psi_i) > u(\psi_{i-1}) =
+                    s(\omega_{i-1,0}) \\
+    \label{eq:14} &s(\omega_{i,0}) = u(\psi_i) > u(\psi_i - \hat x
+                    -2\hat y) = u(\omega_{i,0} - \hat y)
+                    = s(\omega_{i,0} - \hat y) \\
+    \label{eq:15} &s(\omega_{i,0}) = u(\psi_i) < u(\psi_{i+1}) =
+                    s(\omega_{i+1,0}) \\
+    \label{eq:16} &s(\omega_{i,0}) = u(\psi_i) < u(\psi_i + \hat y)
+                    = u(\omega_{i,0} + \hat y)
+                    = s(\omega_{i,0} + \hat y).\\
+    \intertext{\cref{eq:15,eq:16} apply also to the case where
+    $i = 0$, while the other two are replaced by}
+    \label{eq:17} &s(\omega_{0,0}) = u(\psi_0) > u(\psi_0 - \hat y)
+                    = u(\omega_{1,0}) > u(\omega_{0,0} - \hat x)
+                    = s(\omega_{0,0} - \hat x)\\
+    \label{eq:18} &s(\omega_{0,0}) = u(\psi_0) > u(\psi_0 - \hat y)
+                    = u(\omega_{1,0}) > u(\omega_{0,0} - \hat y)
+                    = s(\omega_{0,0} - \hat y) \\
+    \intertext{If $i = n$, \cref{eq:13,eq:14} apply, and we have}
+    \label{eq:19} &s(\omega_{n,0}) < g-1 = u(\omega_{n,0} + \hat x)
+                    = s(\omega_{n,0} + \hat x) \\
+    \label{eq:20} &s(\omega_{n,0}) < g-2 = u(\omega_{n,0} + \hat y)
+                    = s(\omega_{n,0} + \hat y).
+  \end{align}
+  It is straightforward that the tableau condition is satisfied at
+  $\omega_{0,0}$ in the special case that $n = 0$.
+\end{proof}
+
+\begin{example}\label{ex:3}
+  Consider the tableau in \cref{fig:path-connected-odd-ex}, where
+  $g=22$, $r=8$, and $k=5$. We shade the strip $\mu$ in blue for each
+  tableau. In our example, we note that $H(\mu)=5$, so $(x,y)=(3,5)$
+  as $(3,5)\in \mu$, but $(2,5)\notin\mu$; we note that
+  $t(x,y)=17$. Furthermore, we have that $n=1$ as $(x+n,y)=(4,5)$ is
+  the $r$-th leftmost box; this is the box containing $19$. Thus,
+  $(x+n+l-1,y-l+1)=(6,3)$ is the $r$-th rightmost box; this is the box
+  containing $21$. The first step of the algorithm is to cycle out
+  $g-2=21$, and then swap it into $(x',y')$. For the first tableau in
+  \cref{fig:path-connected-odd-ex}, these two operations do not change
+  the tableau. The next step is to cycle out $g-1=22$ and swap it into
+  $(x'+1,y'-1)$. We note that $22$ does not appear in the first
+  tableau, so we do not need to cycle it out. Thus, this operation is
+  captured going from the first tableau to the second by swapping $22$
+  into $(x'+1,y'-1)$ this is the tableau called $u$ in the
+  proof. Since this tableau is not minimal, we do not highlight a
+  strip. Now the boxes $\omega_{i,j}$ are $\omega_{0,0}=(5,2)$ and
+  $\omega_{1,0}=(6,2)$; these are all the values where $\omega_{i,j}$
+  are defined. The last step, we do the replacement of the boxes
+  $\omega_{i,j}$ we just copy these from the corresponding symbols on
+  the top row. We again shade the strip $\mu$, and we remark that the
+  height has decreased. Another iteration of this process would give a
+  tableau non-repeating in the horizontal strip.
+  \begin{figure}[H]
+    \input{figures/path-connected-odd-ex.tex}
+    \caption{}
+    \label{fig:path-connected-odd-ex}
+  \end{figure}
+\end{example}
+
+\section{Discrete properties}\label{sec:counting}
+
+Now that we have established a few general facts about Prym--Brill--Noether loci, we can begin to look at some of their enumerative properties. We start with counting the number of divisors in 0-dimensional loci before looking at 1-dimensional loci. As a future goal, we aim to compute the homology groups and Euler characteristic for loci of any dimension. 
+
+\subsection{Cardinality of finite Prym--Brill--Noether loci}
+
+In this section, we fix $g-1=n(r,k)$. The Prym--Brill--Noether locus is then finite, and its points correspond to staircase Prym
+tableaux where every symbol in $[g-1]$ is used. Denote by $C(r,k)$ the number of divisor classes in $V^r(\Gamma,\varphi)$. 
+This number has been computed \cite[Corollary~6.1.5]{len2019skeletons} for generic edge length or $k>2r-2$ using the hook-length formula. 
+
+ For even gonality $k\leq 2r-2$, we now use the observations from \cref{sec:trop-results} to obtain a bijection between tableaux and certain lattice paths, giving rise to the following formula. 
+
+
+%\steven{Question about statement should $\alpha_i$'s be nonnegative or
+%  stictly positive? If so I don't think it should be $\mathbb{Z}$ }
+
+%\derek{So the $\alpha_i$ are $l$-tuples, each $a_i$ is an integer, and they sum to 0. Ex. $(1,-1,0)$ and $(-1,1,0)$ would be different.}
+
+\begin{proposition}\label{prop:card}
+  For even $k\leq2r-2$, the number of divisors in a 0-dimensional locus is
+    \begin{equation} \label{eq:3}
+    C(r,k) = n!\sum
+    \begin{vmatrix}
+      \frac{1}{(r+\alpha_1 k)!} & \frac{1}{(r-2+\alpha_2 k)!} & \cdots
+      & \frac{1}{(r-k+2+\alpha_l k)!}\\
+      \frac{1}{(r+1+\alpha_1 k)!} & \frac{1}{(r-1+\alpha_2 k)!} &
+      \cdots
+      & \frac{1}{(r-k+3+\alpha_l k)!}\\
+      \vdots & \vdots & \ddots & \vdots\\
+      \frac{1}{(r+l-1+\alpha_1 k)!} & \frac{1}{(r+l-3+\alpha_2 k)!}
+      & \cdots & \frac{1}{(r-l+1+\alpha_l k)!}\\
+    \end{vmatrix}
+    \end{equation}
+    where $n=n(r,k)=g-1$ is the codimension and the sum is taken over
+    all $l$-tuples $(\alpha_i)_{i=1}^l$ for which $\alpha_i \in \Z$ and
+    $\sum_{i=1}^l\alpha_i=0$.
+\end{proposition}
+
+% \begin{proposition}
+%   For $k\leq2r-2$ and even, the number of divisors in a 0-dimensional locus is
+%     \begin{equation} \label{eq:3}
+%     n!\sum_{\substack{\alpha_1+\alpha_2+\cdots+\alpha_l=0\\
+%       \alpha_i\in\Z}}\det
+%     \begin{pmatrix}
+%         \frac{1}{(r+\alpha_1 k)!} & \frac{1}{(r-2+\alpha_2 k)!} & \cdots & \frac{1}{(r-k+2+\alpha_l k)!}\\
+%         \frac{1}{(r+1+\alpha_1 k)!} & \frac{1}{(r-1+\alpha_2 k)!} & \cdots & \frac{1}{(r-k+3+\alpha_l k)!}\\
+%         \vdots & \vdots & \ddots & \vdots\\
+%         \frac{1}{(r+l-1+\alpha_1 k)!} & \frac{1}{(r+l-3+\alpha_2 k)!} & \cdots & \frac{1}{(r-l+1+\alpha_l k)!}\\
+%     \end{pmatrix}
+%     \end{equation}
+%   where $n=n(r,k)=g-1$, the codimension.
+% \end{proposition}
+
+\begin{proof}
+  The set of divisors that we want to enumerate is in bijection with the set of tableaux that are non-repeating in the horizontal strip $\mu_0$. We describe the bijection in the following way: given $\mu$, we create a lattice path in $\Z^l$ that starts at point $(l,l-1,\ldots,1)$, where each step is a standard unit vector. 
+
+  If symbol $a$ appears in box $(x,y)$ of $\mu$, then the $a$-th step of the lattice path is the $x$-th step in the $y$-th index. We note the starting point satisfies $z_1>z_2>\cdots>z_l$ on the indices, and by the tableau condition, when symbol $a$ appears in box $(x,y)$, the symbols in $(x,y')$ for $y'<y$ are smaller than $a$, meaning $x$ steps in smaller indices have already occured, thus still satisfying the inequalities $z_1>z_2>\cdots>z_l$.
+
+  We also must consider the gluing condition, which says $t(x+l,1)>t(x,l)$; on the lattice path, this means the $x+l$-th step in the first index must come after the $x$-th step in the $l$-th index. At the starting point, the first index is already $l-1$ greater than the $l$-th index, and the gluing condition allows this gap to grow to at most $k-1$, giving us the final inequality of $z_l>z_1-k$. Counting the number of boxes per row to find our end point, this gives us a lattice path from $(l,l-1,\ldots,1)$ to $(r+l,r+l-2,\ldots,r-l+2)$ that lies within the hyperplanes given by $z_1>z_2>\cdots>z_l>z_1-k$.
+
+  Given a lattice path from $(l,l-1,\ldots,1)$ to $(r+l,r+l-2,\ldots,r-l+2)$ within the regions $z_1>z_2>\cdots>z_l>z_1-k$, we may reverse the construction to get a nonrepeating strip $\mu$. If the $a$-th step in the lattice path is the $x$-th step in the $y$-th index, then symbol $a$ goes into box $(x,y)$; the first $l-1$ inequalities on the indices ensures the tableau condition, and the last inequality ensures the gluing condition. From \cite[Theorem~10.18.6]{bona2015handbook}, \cref{eq:3} is exactly the number of lattice paths that lie within that region, which coincides with the number of divisors in the locus. 
+\end{proof}
+
+See \cref{figure:keven} for various values of $C(r,k)$.
+
+\begin{figure}[H]
+    \centering
+    \begin{tabular}{c c|c c c c c c|}
+    \cline{3-8}
+    & & \multicolumn{6}{c|}{$r$}\\ \cline{3-8}
+    & & 1 & 2 & 3 & 4 & 5 & 6 \\\cline{1-8}
+    \multicolumn{1}{|c|}{\multirow{4}{*}{$k$}} & 2 & 1 & 1 & 1 & 1 & 1 & 1\\
+    \multicolumn{1}{|c|}{} & 4 & 1 & 2 & 4 & 8 & 16 & 32\\
+    \multicolumn{1}{|c|}{} & 6 & 1 & 2 & 16 & 128 & 1024 & 8178\\
+    \multicolumn{1}{|c|}{} & 8 & 1 & 2 & 16 & 768 & 35840 & 1671168\\
+    \multicolumn{1}{|c|}{} & * & 1 & 2 & 16 & 768 & 292864 & 1100742656\\\hline
+    \end{tabular}
+    \caption{$C(r,k)$ for several values of $r$ and $k$.  The $*$
+      indicates the generic case.}
+    \label{figure:keven}
+\end{figure}
+
+\begin{example}
+ 	For low values of even $k$,  we may exhibit all the horizontal strips (and therefore all the divisor classes) directly. When $k=2$, we have $C(r,k)=1$ for every $r$. Indeed, the Prym tableaux with minimal codimension are uniquely determined by the bottom row, and the only way to fill out the tableau is to use the symbols 1 through $g-1$ in increasing order.
+ 	
+ 	 When $k=4$, we use induction to show that $C(r,k)=2^{r-1}$. 
+ 	 Note that by \cref{thm:tropicalPBN}, the assumption that the locus is finite implies that $g=2r$, so the tableau contains all the symbols in $[g-1]$. 
+ 	  	 When $r=1$, there is a unique way of filling the tableau. 
+ 	  	 Now, assume that the proposition true for $r$ at most $m$, and let $r=m+1$. The tableau is uniquely determined by the horizontal strip, which consists of  $r$ boxes in the
+ 	 bottom row, and $r-1$ boxes in the  row above it. 
+ 	 
+ 	 We note that it is not possible for both $2r-1$ and $2r-2$ to appear in the second row: the largest possible symbol that could appear at the end of the first row is $2r-3$, violating the gluing condition. Thus, $2r-1$ and $2r-2$ appear in the boxes $(r,1)$ and $(r-1,2)$. Once those symbols are placed (in any order), 
+ 	 the remaining boxes produce a tableau of size $r-1$. The  inductive hypothesis implies that there are $2^{r-2}$ such tableaux, so we are done.
+ 	 	 
+ 	
+\end{example}
+%\subsubsection{Special cases}
+%\yoav{Since all of these follow from the proposition, we should probably turn one of them into an example, and remove the rest.}
+%For the special cases $k=2$ and $k=4$, the problem is easy enough that we can directly count tableaux, rather than creating a bijection with lattice paths. The simplest case occurs when $k=2$:
+%
+%\begin{proposition}
+%  For $k=2$ and a given $r$, $C(r,k)=1$.
+%\end{proposition}
+%
+%\begin{proof}[Proof.]
+%  When $k=2$, the Prym tableaux with minimal codimension are uniquely determined by the bottom row. Thus, we have a 1 by $r$ rectangle, and the only way to fill out the tableau is to use the symbols 1 through $g-1$ in increasing order.
+%\end{proof}
+%
+% When $k=4$, we can use induction to prove the following proposition:
+%
+%\begin{proposition}
+%  \label{k4dim0}
+%  For $k=4$ and a given $r$, $C(r,k)=2^{r-1}$.
+%\end{proposition}
+%
+%\begin{proof}[Proof.]
+%  When $r=1$, we observe that the symbol 1 must always go in the only box. There is $2^{1-1}=1$ way do this.
+%  
+%  Assume the proposition true for some positive integer $m$, and let $r=m+1$. The tableau is uniquely determined by the bottom two rows, with $r$ boxes in the
+%  bottom row, and $r-1$ boxes in the second row. We look at the
+%  placement of the largest two symbols, $2r-1$ and $2r-2$, in the
+%  tableau.
+%
+%  We consider what happens when $2r-1$ and $2r-2$ appear in boxes $(r-1,2)$ and $(r-2,2)$, the last two boxes in the second row. Then, the largest symbol that could possibly go in box $(r,1)$, the last box of the first row, is $2r-3$; this means $2r-3$ will appear above $2r-2$ in the full staircase tableaux, violating the gluing condition. 
+%  
+%  
+%  Thus, symbols $2r-1$ and $2r-2$ must go in boxes $(r,1)$ and $(r-1,2)$, the last boxes of each row, or the last anti-diagonal. The order of placement within
+%  the anti-diagonal does not matter, giving two ways to place the symbols $2r-1$ and $2r-2$ into
+%  last anti-diagonal. Once those two symbols are placed, the remaining boxes produce a tableau of size $r-1$, which from the inductive hypothesis, give $2^{r-2}$ possible arrangement of symbols. Thus multiplying by two for the two choices for position of the largest two symbols, we see there is 
+%  $2(2^{r-2})=2^{r-1}$ ways to fill the tableau of size $r$.
+%\end{proof}
+
+%\subsection{Higher dimensional loci}
+
+When the Prym--Brill--Noether locus has positive dimension, its top dimensional cells are still uniquely determined by fillings of a horizontal strip with $n(r,k)$ symbols, leading to the following formula.  
+
+
+%The difficulty that arises in higher dimensional loci is due to limitations of Prym tableaux. While they are useful in studying divisors, they say little about the intersections of components in high dimension, and the intersections of more than two components. However, they are enough to prove the two following results, which we use when we discuss 1-dimensional loci.
+
+\begin{proposition}
+  \label{prop:numcomp}
+  Let $k\leq 2r-2$ be an even integer. The number of top-dimensional components of $V^r(\Gamma,\varphi)$ equals 
+  \begin{gather*}
+  \binom{g-1}{n(r,k)}\cdot C(r,k).
+  \end{gather*}
+\end{proposition}
+
+%\begin{proof}[Proof.]
+% Each top dimensional component corresponds uniquely to a filling of a horizontal strip of height $l$ with $n(r,k)$ symbols. We have $\binom{g-1}{n(r,k)}$ choices for such symbols, and for each choice, $C(r,k)$ ways of filling the strip. 
+% 
+%  We can look at the corresponding problem on Prym tableaux. Out of
+%  $g-1$ symbols, we only need to choose $C(r,k)$ of them to be in the
+%  tableau. Then, given those symbols, there are $C(r,k)$ ways to fill
+%  out the tableau, and multiplying gives us the number of components.
+  
+%\end{proof}
+%
+%\begin{proposition}
+%  \label{intersect}
+%  The intersection of any number of components, if nonempty, is a torus of smaller dimension. 
+%  \yoav{this statement is inaccurate in the $0$-dimensional case, because we have a union of $0$-dimensional tori. Please make sure that you're not missing anything in higher dimensional cases as well.}
+%\end{proposition}
+%
+%\begin{proof}[Proof.]
+%  We note that if any two tableaux do not agree on a symbol, then their intersection is empty. Thus, in the intersection, a number of loops are fixed, and the remaining are free. The number of fixed loops must be greater than the codimension, so the number of free loops is smaller than the dimension.
+%\end{proof}
+%
+%For future study, we believe defining and studying some form of dual complex will be a good approach. This dual complex, another combinatorial object, will better record how components of loci intersect, allowing for a cellular decomposition of the loci and easier computation of homology groups and Euler characteristic. 
+
+
+\subsection{Genus of 1-dimensional loci} %in the generic case
+We now turn our attention to loci of dimension $1$, by choosing $r$ and $k$ so that  $g-1=n(r,k)+1$. The Prym--Brill--Noether locus is then a graph embedded in the Prym variety.  Since each tableau corresponds to a circle, $V^r(\Gamma,\varphi)$ is a $4$-regular graph. This section is devoted to calculating its genus  in the generic and $k=2,4$ cases, as well as other combinatorial properties. We begin with a simple observation.
+%The irreducible components of these loci are circles, two of which may only intersect non-trivially at a point. 
+%It is natural to ask about the genus of this graph. 
+
+ \begin{lemma} \label{genuslemma}
+	The genus of $V^r(\Gamma,\varphi)$ equals the number of vertices plus 1.
+\end{lemma}
+
+\begin{proof}
+	Since the graph is $4$-valent, the number of edges $e$ equals twice the number of vertices $v$. The genus is therefore $e-v+1 = 2v-v+1=v+1$. 
+\end{proof}
+
+Each circle in the graph corresponds to a staircase tableau with exactly one missing symbol $m$, which we refer to as the \emph{free} symbol.  The reason for this terminology is that in the corresponding divisors, the position of the chip on the $m$-th and $2g-m$ loop is not determined. Accordingly, we refer to these loops as \emph{free} as well. 
+Two tableaux $t$ and $t'$ with missing symbols $m$ and $m'$ respectively give rise to intersecting circles precisely when we can swap $m$ with a symbol appearing in $t$ to create $t'$. 
+
+%with relating this problem back to Prym tableaux: they are minimally filled out tableaux, with exactly one symbol missing. We call the missing symbol $m\in[g-1]$ the \emph{free} symbol, since on the divisor, it corresponds to being able to place a chip freely on the $m$-th loop. When we refer to the divisor, we will say $m$ is the \emph{free} loop in our chain of loops.
+%
+%Proposition \ref{numcomp} determines the number of circles in the locus. To find the genus, we need to also count the number of vertices in which pairs of circles intersect.
+
+
+%Each circle in the locus corresponds to a Prym tableau, thus giving us a lower bound on the genus using Proposition \ref{numcomp}. However, the intersections can occur in a way that increases the genus. For a tableau $t$ with missing symbol $m$, $t$ intersects with $t'$ if we can swap $m$ with a symbol appearing in $t$ to create $t'$. In the locus, this corresponds to the wedge of the circles that $t$ and $t'$ correspond to. To accurately compute the genus, we must count the total number of wedges, which becomes counting the number of intersects for all tableau. We state the following lemma:
+
+
+
+
+%since we have standard Young tableaux on the staircase shape, we can use the result from \cite[Theorem~2.9]{chan2018genera} to calculate the genus:
+
+%\begin{theorem}
+%	\label{thm:genericdim1}
+%	If $\Gamma$ is a generic chain of loops and $\dim V^r(\Gamma,\varphi)=1$, then the average number of intersections for each circle of the locus is $r$, and the genus of the locus is
+%	\begin{gather*}
+%		\frac{r}{2}\cdot C(r,0) \cdot \left(\binom{r+1}{2}+1\right)+1.
+%	\end{gather*}
+%\end{theorem}
+
+\begin{proof}[Proof of \cref{genericdim1}.]
+	For any skew shape $\lambda$, denote $f^\lambda$ the number of ways of filling $\lambda$ with distinct symbols. When $\lambda$ is a staircase tableau of length $r$, $f^\lambda$ is just $C(r,0)$. Since we assume that the edge lengths are generic, the number of symbols required for a length $r$ staircase tableau is $\binom{r+1}{2}$. Since the Prym--Brill--Noether locus is $1$-dimensional, the total number of symbols is $\binom{r+1}{2}+1$. Every choice of symbols gives $C(r,0)$ different tableaux, so $V^r(\Gamma,\varphi)$ consists of $C(r,0) \cdot \left(\binom{r+1}{2}+1\right)$ circles. The claim will be proven once we show that the average number of vertices for each circle is $r$ (keeping in mind that every vertex is double counted this way).
+	
+	
+	%  We first note that $C(r,k)$ can be found simply using the hook-length formula, and we will also refer to it as $f^\lambda$, the number of ways to fill out the standard Young tableau on the staircase shape. Additionally, $n(r,k)$ is just the $r$-th triangle number, and the product of these two values comes from \cref{prop:numcomp}. \derek{The way prop 5.3 is currently stated, it only works for even $k\leq 2r-2$. As an alternative, we could cite \cite[Lemma~2.7]{chan2018genera}.}
+	
+	From \cite[Theorem~2.9]{chan2018genera}, it follows that the average number of vertices per circle is
+	% \yoav{This is not a formula, it's an expression. What does it describe?}:
+	\begin{gather*}
+		E= 2\left(r+\sum_{i=1}^{r}\frac{r-i}{n+1} \cdot
+		\frac{f^{\prescript{i}{}{\lambda}}}{f^{\lambda}}-\sum_{i=1}^{r}\frac{r+1-i}{n+1} \cdot
+		\frac{f^{\lambda^{i}}}{f^{\lambda}}\right),
+	\end{gather*}
+	
+	where the terms $\prescript{i}{}{\lambda}$ and $\lambda^{i}$ describe the tableaux  obtained by adding a box to the left or the right respectively in the $i$-th row. We claim that in our case, this entire expression equals $r$.  
+	%   \derek{The proof of this theorem uses "shape" and "hook length" from Young tableaux that weren't introduced earlier, since it wasn't necessary for discussion of Prym tableaux. I'm not sure of the best way to introduce and use them for the proof.}
+	
+	First, let us consider the term 
+	\begin{gather*}
+		\sum_{i=1}^{r}\frac{r-i}{n+1} \cdot
+		\frac{f^{\prescript{i}{}{\lambda}}}{f^{\lambda}}.
+	\end{gather*}
+	Observe that for $i\neq r$, the resulting shape of $\prescript{i}{}{\lambda}$ is not a skew tableau, so $f^{\prescript{i}{}{\lambda}}=0$, the number of fillings of this shape is $0$.  When $i=r$, while it is a skew tableau, we have $r-i=0$ in
+	the numerator. Thus, this term in the expression is 0, and
+	does not need to be considered.
+	
+	Next, we look at 
+	\begin{gather*}
+		\sum_{i=1}^{r}\frac{r+1-i}{n+1} \cdot
+		\frac{f^{\lambda^{i}}}{f^{\lambda}} = \sum_{i=1}^{r}(r+1-i) \cdot
+		\frac{f^{\lambda^{i}}}{(n+1)f^{\lambda}}.
+	\end{gather*}
+	In this sum we need to enumerate the tableaux obtained by adding a
+	box to the end of each row of the staircase tableau. Each of these number can be computed using the hook length formula. 
+	%  This will  involve observing how the hook lengths change as a new box is added. 
+	We note that in the staircase tableau, the boxes on the largest anti-diagonal have
+	hook length 1, the boxes on the next largest have hook length 3,
+	and so on until the hook length of the bottom left square is $2r-1$.
+	
+	\begin{figure}[H]
+		\centering
+		\ytableausetup{boxsize=normal}
+		\begin{ytableau}
+			1\\
+			3 & 1\\
+			5 & 3 & 1\\
+			7 & 5 & 3 & 1\\
+			9 & 7 & 5 & 3 & 1
+		\end{ytableau}
+		\quad
+		\begin{ytableau}
+			1\\
+			3 & 1\\
+			6 & 4 & 2 & 1\\
+			7 & 5 & 3 & 2\\
+			9 & 7 & 5 & 4 & 1
+		\end{ytableau}
+		\caption{Hook lengths of each box, before and after adding the box for $r=5$, $i=3$.}
+		\label{talbeau:hlchange}
+	\end{figure}
+	
+	When  a box is added, the hook length of every box in its row and column increases by $1$, while all other hook lengths
+	remain the same. Thus, the fraction
+	$\frac{f^{\lambda^{i}}}{(n+1)f^{\lambda}}$ simplifies down to the
+	ratio of the differing hook lengths:
+	\begin{gather*}
+		\frac{f^{\lambda^{i}}}{(n+1)f^{\lambda}} = \frac{(n+1)!\prod
+			h_{\lambda}(i,j)}{(n+1)n!\prod h_{\lambda^i}(i,j)} =
+		\frac{(2(r-i)+1)!!(2i-3)!!}{(2(r-i+1))!!(2i-2)!!}
+	\end{gather*}
+	where $(-1)!!$ is defined as 1. 
+	%The two double factorials in the   numerator are of odd numbers, while the double factorials in the
+	%  denominator are of even numbers, each 1 greater than the two odd
+	%  numbers. 
+	We observe that 
+	
+	\begin{gather*}
+		\frac{(2i-3)!!}{(2i-2)!!}=\frac{(2i-3)!!}{2^{i-1}(i-1)!}
+		=\frac{(2i-2)!}{2^{i-1}(i-1)!(2i-2)!!}
+		=\frac{(2i-2)!}{2^{i-1}(i-1)!2^{i-1}(i-1)!}
+		=\frac{\binom{2i-2}{i-1}}{2^{2(i-1)}}.
+	\end{gather*}
+	A similar calculation gives us 
+	\begin{gather*}
+		\frac{(2(r-i)+1)!!}{(2(r-i+1))!!} =
+		\frac{\binom{2(r-i+1)}{r-i+1}}{2^{2(r-i+1)}}.
+	\end{gather*}
+	
+	Thus, we have 
+	\begin{gather*}
+		\frac{f^{\lambda^{i}}}{(n+1)f^{\lambda}}
+		=\frac{\binom{2i-2}{i-1}\binom{2(r-i+1)}{r-i+1}}{2^{2r}}.
+	\end{gather*}
+	
+	We can reindex the sum by setting $j=r-i+1$, thus becoming
+	\begin{gather*}
+		\sum_{i=1}^{r}(r-i+1) \cdot
+		\frac{\binom{2i-2}{i-1}\binom{2(r-i+1)}{r-i+1}}{2^{2r}} =
+		\sum_{j=1}^{r}j\cdot
+		\frac{\binom{2j}{j}\binom{2(r-j)}{r-j}}{2^{2r}}.
+	\end{gather*}
+
+  We observe for $j$ and $r-j$, we have
+  \begin{gather*}
+  j\cdot\frac{\binom{2j}{j}\binom{2(r-j)}{r-j}}{2^{2r}} + (r-j)\cdot\frac{\binom{2(r-j)}{(r-j)}\binom{2(r-(r-j))}{r-(r-j)}}{2^{2r}} = r\cdot\frac{\binom{2j}{j}\binom{2(r-j)}{r-j}}{2^{2r}}.
+  \end{gather*}
+
+  Thus, grouping $j$ and $r-j$ together, this becomes
+  \begin{gather*}
+  \sum_{j=1}^{r}j\cdot\frac{\binom{2j}{j}\binom{2(r-j)}{r-j}}{2^{2r}} = \frac{r}{2}\sum_{j=1}^{r}\frac{\binom{2j}{j}\binom{2(r-j)}{r-j}}{2^{2r}}.
+  \end{gather*}
+
+  Finally, by \cite{CBCC}, the sum is equal to 1, and the term is equal to $\frac{r}{2}$. Plugging this value back in the formula for $E$, we conclude that the average number of vertices at each circle is $r$. 
+  \end{proof}
+	
+	% We note that
+	
+	% \begin{gather*}
+	%   i\cdot \frac{\binom{2i}{i}\binom{2(r-i)}{r-i}}{2^{2r}} +
+	%   (r-i)\cdot
+	%   \frac{\binom{2(r-i)}{r-i}\binom{2(r-(r-i))}{r-(r-i)}}{2^{2r}} =
+	%   r\cdot \frac{\binom{2i}{i}\binom{2(r-i)}{r-i}}{2^{2r}}.
+	% \end{gather*}
+	% Since the fractions form a probability distribution, they sum to one; using this, we can calculate this sum to be $\frac{r}{2}$. multiplying by 2, we get that the average number of circles wedged to a circle is $r$, and we get our genus
+	% \begin{gather*}
+	%   i\cdot \frac{\binom{2i}{i}\binom{2(r-i)}{r-i}}{2^{2r}} +
+	%   (r-i)\cdot
+	%   \frac{\binom{2(r-i)}{r-i}\binom{2(r-(r-i))}{r-(r-i)}}{2^{2r}} =
+	%   r\cdot \frac{\binom{2i}{i}\binom{2(r-i)}{r-i}}{2^{2r}}.
+	% \end{gather*}
+	% Since the fractions form a probability distribution, they sum to one; using this, we can calculate this sum to be $\frac{r}{2}$. Multiplying by 2, we get that the average number of circles wedged to a circle is $r$, and we get our genus
+	%  \begin{gather*}
+	%      \frac{r\cdot f^\lambda\cdot(\binom{r+1}{2}+1)}{2} + 1=\frac{r}{2}\cdot C(r,k)\cdot (n(r,k)+1) + 1.
+	%  \end{gather*}
+
+
+%\derek{I feel this example may be unnecessary, since we never talk about staircase paths; we could just say the methods just used don't apply, or just don't mention this case at all.}
+%We have used \cite[Theorem~2.9]{chan2018genera} for only the generic case; it
+%does not work for the case when $k\leq 2r-2$, again due to the fact that we no longer have standard Young tableaux. The staircase paths through the
+%tableau overcount the possible switches we can do
+%(see Figure \ref{tableau:kevenswap}, and see \cite{chan2018genera} for more on staircase paths). Since $k=2$ and $k=4$ are simple cases, we do have other ways of calculating the genus.
+%
+%\begin{figure}[H]
+%    \centering
+%    \begin{tikzpicture}[inner sep=0in,outer sep=0in]
+%    \node (n) {\begin{varwidth}{5cm}{
+%    \ytableausetup
+%    {boxsize=.625cm}
+%    \begin{ytableau}
+%    4 & 13 & 21 & 23\\
+%    3 & 12 & 17 & 18 & 19\\
+%    2 & 9 & 11 & 15 & 16 & 20\\
+%    1 & 5 & 6 & 7 & 8 & 14 & 22
+%    \end{ytableau}}\end{varwidth}};
+%    \draw[line width=0.075cm,black]
+%    ([yshift=1.33cm]n.west)--++(1.93,0);
+%    \draw[line width=0.075cm,black]
+%    ([xshift=0.32cm,yshift=-0.03cm]n.south)--++(1.93,0);
+%    \draw[line width=0.075cm,blue] ([yshift=1.28cm]n.west)--++(.645,0)--++
+%    (0,-1.28)--++(.64,0)--++(0,-.64)--++(1.925,0)--++(0,-.64)--++(1.3,0);
+%    \end{tikzpicture}
+%    \caption{A staircase path through the identified tableau that overcounts the
+%    possible valid switches. Despite being counted, 4 and 14 are not valid
+%    switches with 10, since it would break the gluing condition on the Prym tableau.}
+%  \label{tableau:kevenswap}
+%\end{figure}
+
+We finish by computing the genus of the Prym--Brill--Noether curve for low even gonality. 
+\begin{proposition}\label{prop:k2dim1}
+  Suppose that $k=2$ and that the Prym--Brill--Noether locus is $1$-dimensional. Then it contains  $r+1=g-1$ circles, and has genus $r+1$.
+\end{proposition}
+
+\begin{proof}[Proof.]
+  In this case, the tableau contains $g-2$ symbols and is determined by the bottom $1\times r$ rectangle; the positions of the symbols in the strip are determined after choosing which symbol to leave out.  When 1 or $g-1$ is the free symbol, it may only swap into the first or last cell in the strip,   respectively, so the corresponding circle only has a single vertex. If any other symbol $m$ is left out,  it can swap with either the symbol $m-1$ or $m+1$, so the corresponding circle has two vertices. Thus, the locus is a chain of $r+1=g-1$ circles wedged together, which has a genus of $r+1$.
+\end{proof}
+
+In the $k=4$ case, we compute the genus, and find the number vertices each circle has.
+
+\begin{proposition}
+  \label{prop:k4dim1}
+  Suppose that $k=4$ and that the Prym--Brill--Noether locus is $1$-dimensional. Then it has the following structure. 
+  \begin{enumerate}[label=(\roman*)]
+      \item The circles corresponding to the free symbol $1$ have a single vertex.
+      \item The circles corresponding to any other odd free symbol have two vertices.
+      \item The circles corresponding to the free symbol 2 have three vertices.
+      \item The circles corresponding to the free symbol $2r$ have two vertices.
+      \item The circles corresponding to any other even free symbol have four vertices.
+  \end{enumerate}
+  The graph has $2^{r-1}\cdot 2r$ circles and genus $2^{r-1}(3r-2)+1$.
+\end{proposition}
+
+\begin{proof}[Proof.]
+ Since $k=4$, the genus and rank are related by $g=2r+1$. From the gluing condition, it follows that the pair of symbols in each of the boxes $(m+1,1)$ and $(m,2)$ is strictly bigger than the pair of symbols in $(m,1)$ and $(m-1,2)$ (see \cref{tableau:4swap}). In total, for any missing symbol there are $2^{r-1}$ ways of filling the tableau, giving rise to $2^{r-1}\cdot (2r)$ circles. 
+ 
+ Next, we calculate the number of vertices in the graph, by finding the number of ways of swapping in a free symbol.
+  If the free symbol is $1$, it may only be swapped with $2$, which must be in the bottom left corner. Therefore, any circle corresponding to a tableau with missing symbol $1$ has exactly one vertex. Similarly, a missing $2$ may only be swapped for the first three boxes, and a missing $2r$ may only be swapped for the two rightmost boxes.
+  
+Suppose that the strip is missing an even symbol $2<2m<2r$. Then the symbols in the boxes $(m+1,1)$ and $(m,2)$ are $2m-2$ and $2m-1$, and the symbols in the boxes to to right are $2m+1$ and $2m+2$. The symbol $2m$ may be swapped in for  any of them. 
+If, on the other hand, the strip is missing the odd symbol $2<2m+1<2r$, then the boxes  $(m+1,1)$ and $(m,2)$ are $2m$ and $2m+2$, and the symbols to the right are $2m+3$ and $2m+4$. Our symbol $2m+1$ may only be swapped in for of $2m$ or $2m+2$ without violating either the tableau or gluing condition. 
+
+Altogether, we see that there are 
+  \begin{gather*}
+\frac{(4(r-2) + 2(r-1) + 1 + 3 + 2) \cdot 2^{r-1}}{2} = 2^{r-1}(3r-2)
+\end{gather*}
+vertices,  so the genus is $2^r\cdot (3r-2) + 1$  by \cref{genuslemma}. 
+\end{proof}
+
+%  When $r=1$, the corresponding tableau consists of a single box, that we may fill with two symbols $\{1,2\}$. So the locus consists of two circles intersecting at a point, and the genus is $2^{1-1}(3(1)-2)+1=1+1$.
+%    When $r=2$, the tableaux consists of three box, and the symbol set is $\{1,2,3,4\}$. If 1 is free, it may only be swapped in for $2$, which must be in the bottom left box, giving rise to one possible vertex. 
+%   If 2 is free, then it can swap
+%  with any symbol.  This gives us the three possible vertices. When 3 is free,   it can swap with the 2 and 4 on the top anti-diagonal, giving two vertices. Finally,   a free 4 can swap with the 2 and 3 on the top anti-diagonal, again giving two vertices. 
+%  Once we choose our free symbol, there are two ways to fill the rest of the tableau. Since there are $4$ free symbols, the locus consists of $8$ circles and $8$ vertices in total, and the genus is $2^{2-1}(3(2)-2)+1=2(4)+1=8+1$.
+% 
+%   We can build this up using induction, with two base cases that are simple enough to count directly. 
+%  With $r=1$, in the corresponding tableau, we have 1
+%  square, and symbol set $\{1,2\}$. This is two circles with one intersection, so the genus is $2^{1-1}(3(1)-2)+1=1+1$.
+%  
+%  When $r=2$, we have three squares and symbol set $\{1,2,3,4\}$ on the corresponding tableau. If 1 is free, then 2 must be in the bottom left square. The only
+%  place 1 can swap is with the 2, giving one possible intersection. If 2 is free, then it can swap
+%  with any symbol: it is less than the 3 and 4 which must be on the
+%  biggest anti-diagonal, so it can swap with 1. Also, it is greater than
+%  1, so it can swap onto the biggest anti-diagonal. This gives us the three possible intersections. When 3 is free, it can swap with the 2 and 4 on the anti-diagonal, giving two intersections. Finally, 
+%  a free 4 can swap with the 2 and 3 on the anti-diagonal, again giving two intersections. 
+
+  
+%  Now, suppose that the proposition is true for $r=m$,  and let $r=m+1$. By
+%  the inductive hypothesis, when $2m$ is free, then in the tableau of rank $m$, it has two places to swap into: the boxes on the largest
+%  anti-diagonal. We note that $2m$ must be larger than either symbol in
+%  those boxes, as it is the largest symbol in our symbol set.
+
+  
+%  When we increase the rank by 1, we add an additional
+%  anti-diagonal. When $2m$ is free in the new tableau of rank $m+1$, we observe
+%  that the two symbols in the new last anti-diagonal must be $2m+1$ and $2m+2$, both smaller than $2m$. 
+%
+%  Thus, $2m$ can swap into the second largest
+%  anti-diagonal as before, but it can also now swap into the largest anti-diagonal (see Figure \ref{tableau:4swap}). Now, $2m$ is no
+%  longer than maximal even number, and has two additional places it can swap into,
+%  for a total of four. Next, if $2m+1$ is free, it can swap into any square along the last
+%  anti-diagonal; likewise for $2m+2$.
+%  
+%  Thus, every even number, other than 2 and $2r$, contribute four intersections, and every
+%  odd number, other than 1, contributes two. A free 1 still has one intersection, a free 2 still has three intersections, and $2r$ now has two intersections. Once we choose a free symbol, there are $2^{r-1}$ tableaux on the remaining symbols. Thus, the total number of intersections is
+
+
+
+  
+\begin{figure}[H]
+	\centering
+	\ytableausetup{mathmode, boxsize=2em}
+	\begin{ytableau}
+		3\\
+		1 & 2
+	\end{ytableau}
+	\quad$\cdots$\quad
+	\begin{ytableau}
+		\scriptstyle 2m-3 & \scriptstyle2m-2 & \scriptstyle 2m+1\\
+		\none & \scriptstyle 2m-4 &  \scriptstyle 2m-1 & \scriptstyle 2m+2
+	\end{ytableau}
+	\caption{The bottom 2 rows of a tableau. The symbol $2m$ is missing, and may be swapped in four different boxes.}
+	\label{tableau:4swap}
+\end{figure}
+
+
+\begin{example}
+  Let $g=7$, $k=4$, and $r=3$. The Prym--Brill--Noether locus is depicted in \cref{fig:k4d1}.
+  In this case, $n(r,k)=5$, and $C(r,k)=2^{3-1}=4$. \cref{prop:numcomp} shows that the locus consists of $4\cdot\binom{6}{5}=24$ circles, and \cref{prop:k4dim1} implies that the genus is $4(3(3)-2)+1=29$. 
+
+  \begin{figure}[H]
+  \centering
+  \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[scale=0.2]{figures/bitmap.png}
+    \caption{$V^r$ for $(g,k,r)=(7,4,3)$.}
+    \label{fig:k4d1}
+  \end{subfigure}%
+  \begin{subfigure}[t]{.5\textwidth}
+    \centering
+    \ytableausetup{mathmode, boxsize=2em}
+      \begin{ytableau}
+      5\\
+      4 & 6\\
+      1 & 2 & 5
+      \end{ytableau}
+    \caption{The tableau corresponding to the highlighted circle in the locus.}
+  \end{subfigure}
+  \end{figure}
+
+  The four circles with four vertices correspond to tableaux with free symbol 4. The two circles with only a single vertex correspond to the free symbol 1, and the circles they intersect with correspond to $2$ being the free symbol. The highlighted circle in red is the circle corresponding to the tableaux on the right, which has free symbol 3. The highlighted point of intersection corresponds to swapping the symbols $4$ and $3$. 
+\end{example}
+
+
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
