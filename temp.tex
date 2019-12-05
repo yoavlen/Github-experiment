@@ -8,7 +8,27 @@
 \usepackage[margin=2cm]{geometry}
 \usepackage{xparse}
 \usepackage[dvipsnames]{xcolor}
-\usepackage{changepage} % for adjustwidth environment
+\usepackage{changepage
+	%
+	%\author{
+	%  Steven Creech
+	%  \and
+	%  Yoav Len\thanks{
+	%
+	%\author{
+	%  Steven Creech
+	%  \and
+	%  Yoav Len\thanks{\email{yoav.len@math.gatech.edu}}
+	%  \and
+	%  Caelan Ritter
+	%  \and
+	%  Derek Wu
+	%  }  \email{yoav.len@math.gatech.edu}}
+	%  \and
+	%  Caelan Ritter
+	%  \and
+	%  Derek Wu
+	%  }  } % for adjustwidth environment
 \usepackage[inline]{enumitem}
 \usepackage{verbatim}
 \setlist[enumerate,1]{label = (\alph*),
@@ -77,7 +97,13 @@
 \newcommand*{\wti}[1]{\widetilde{#1}}
 \newcommand*{\restrict}[1]{{\mid}_{#1}}
 \newcommand*{\intr}[1]{#1^{\circ}}
-\newcommand*{\bdry}[1]{\partial #1}
+\newcommand*{\bdry}[1]{\partial #1}thscr\relax % just so we can load this and rsfs
+\usepackage[scr]{rsfso}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows, cd, calc}
+\usepackage{pgfplots}
+\usepackage{yta
 \makeatletter
 \let\@@pmod\pmod
 \DeclareRobustCommand{\pmod}{\@ifstar\@pmods\@@pmod}
@@ -190,7 +216,23 @@
 
 \author{Caelan Ritter}
 \address{Department of Mathematics, Brown University, Providence, RI 02912, USA}
-\email{\href{mailto:caelan\_ritter@gatech.edu}{caelan\_ritter@gatech.edu}}
+\email{\href{mailto:caelan
+		\DeclareAutoPairedDelimiter{\p}{(}{)}
+		\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+		\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+		
+		\theoremstyle{definition}
+		\newtheorem{definition}{Definition}[section]
+		\newtheoremstyle{problem}%
+		{}{}%
+		{}{}%
+		{\bfseries}{.}%
+		{ }%
+		{\thmname{#1}\thmnumber{ #2}\thmnote{ #3}}
+		\theoremstyle{problem}
+		\newtheorem{example}[definition]{Example}
+		\theoremstyle{plain}
+		\newtheorem{propositio_ritter@gatech.edu}{caelan\_ritter@gatech.edu}}
 
 \author{Derek Wu}
 \address{School of Mathematics, Georgia Institue of Technology, Atlanta, GA 30332-0160, USA}
@@ -1803,7 +1845,32 @@ $\omega + \hat x = (x+1,y)$ and $\omega - \hat y = (x,y-1)$.
   \begin{figure}[H]
     \input{figures/path-connected-odd-ex.tex}
     \caption{}
-    \label{fig:path-connected-odd-ex}
+    \label{fig:path-connected- right component of both
+    	$T_r \setminus \mu$ and $T_r \setminus \nu$ for $j \geq 1$.  See
+    	\cref{fig:pathoddproof} for a schematic diagram of our notations.
+    	
+    	To go from $t$ to $s$, we could try to replace the symbol in
+    	$\omega_{i,j}$ with the symbol in $\psi_i$ for each $i$ and $j$, and
+    	leave all other symbols unchanged.  This operation does not change
+    	the diagonal modulo $k$ in which any symbol lives; this, combined
+    	with the fact that $t$ is minimal, would imply that $t$ and $s$ are
+    	equivalent.  This should be an immediate cause for worry, since, by
+    	\cref{prop:2}, two tableaux that are non-repeating on different
+    	strips cannot be equivalent.  The tableau condition must fail
+    	somewhere.  In fact, it fails precisely at $\omega_{n,0}$, which
+    	lies on $A_{r-1}$.  Indeed, we have
+    	$t(\psi_n) > t(\psi_n - \hat y) = t(\omega_{n,0}+ \hat x)$; it is
+    	also possible (though not necessary) that
+    	$t(\psi_n) > t(\omega_{n,0} + \hat y)$.  This cause a failure of the
+    	tableau condition when we attempt to copy the symbol $t(\psi_n)$
+    	into $\omega_{n,0}$.  We shall modify $t$ so that these issues are
+    	avoided; in particular, we will put the two largest symbols, $g-2$
+    	and $g-1$, into $\omega_{n,0} + \hat y$ and $\omega_{n,0} + \hat x$,
+    	respectively.  Afterwards, we shall verify that the tableau
+    	condition does not fail anywhere else.
+    	
+    	Cycle out $g-2$ and swap it into $\omega_{n,0} + \hat y$.  Then
+    	cycle out $g-1$ and call the resulting tableaodd-ex}
   \end{figure}
 \end{example}
 
